@@ -18,15 +18,20 @@
                 <div class="logo">
                     <a href="#">Video<span>dev</span></a>
                 </div>
-                <div class="nav">
-                    <ul>
-                        <li><a href="#">Лента</a> <span class="label">4</span></li>
-                        <li><a href="#">Выход</a></li>
-                    </ul>
-                </div>
-                <div class="logout">
-                    <a href="#" class="zocial facebook">Sign in with Facebook</a>
-                </div>
+
+                @if(models.User.isLogged()) {
+                    <div class="nav">
+                        <ul>
+                            <li><a href="#">Лента</a> <span class="label">4</span></li>
+                            <li><a href="#">Выход</a></li>
+                        </ul>
+                    </div>
+                } else {
+                    <div class="logout">
+                        <a href="#" class="zocial facebook">Войти</a>
+                    </div>
+                }
+
             </div>
         </header>
 
