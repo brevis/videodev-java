@@ -1,0 +1,58 @@
+@(title: String = "Videodev")(content: Html)
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@title</title>
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/font-awesome.min.css")">
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/zsocial.css")">
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/videodev.css")">
+    <!--[if IE]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+    <div id="content">
+        <header>
+            <div class="wrapper">
+                <div class="logo">
+                    <a href="#">Video<span>dev</span></a>
+                </div>
+                <div class="nav">
+                    <ul>
+                        <li><a href="#">Лента</a> <span class="label">4</span></li>
+                        <li><a href="#">Выход</a></li>
+                    </ul>
+                </div>
+                <div class="logout">
+                    <a href="#" class="zocial facebook">Sign in with Facebook</a>
+                </div>
+            </div>
+        </header>
+
+        
+        
+        <section class="main">
+            <div class="wrapper">
+                @content
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="wrapper">
+            <p class="left">
+                <span class="copyleft">&copy;</span> <a href="#">Video<span>dev</span></a> 2015
+            </p>
+            <p class="right">
+                <a href="about.html">About</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="@routes.Assets.at("javascripts/jquery-2.1.3.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+    <script src="@routes.Assets.versioned("javascripts/common.js")"></script>
+
+</body>
+</html>

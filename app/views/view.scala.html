@@ -1,0 +1,62 @@
+@main() {
+
+    @sidebar()
+
+    <div class="main">
+        <div class="block">
+            <span class="label category">Java</span> <span class="label course">Курс</span> <button class="right btn btn-xs" onclick="$(this).toggleClass('active').blur();">Отображать в моей ленте</button>
+            <h2>Lorem isum dolor sit amet</h2>
+
+            <div class="accordion" id="accordioninfo">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordioninfo" href="#courseinfo">Описание</a>
+                    </div>
+                    <div id="courseinfo" class="accordion-body collapse out">
+                        <div class="accordion-inner">
+                            <p>
+                                <img src="http://www.fandroid.info/wp-content/uploads/2015/02/JAVA-ICON.png   " class="cover">
+                            </p>
+                            <p>Очень многие программисты, которые начинают писать программы для Android, уже имеют за плечами опыт работы с другими языками программирования. И, они на ходу уже разбираются с особенностями Java. Тем более, что Java в своем синтаксисе очень похож на C++, C#, PHP и т.д.</p>
+
+                            <p>Основой для логотипа языка Java послужил этот рисунок, но дизайнер, которому поручили перевести рисунок в вектор, был потомком Остапа Бендера, поэтому получилась какая-то фигня.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" href="post.html?episode1">Episode 1: Hello, World!</a>
+                    </div>
+                    <div class="accordion-body collapse in">
+                        <div class="accordion-inner">
+                            <iframe width="100%" height="440" src="https://www.youtube.com/embed/yRY23wmgjEU?rel=0" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" href="post.html?episode2">Episode 2: Play Framework</a>
+                    </div>
+                    <div class="accordion-body collapse out">
+                        <div class="accordion-inner">
+                            <iframe width="100%" height="440" src="https://www.youtube.com/embed/yRY23wmgjEU?rel=0" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="meta clear">
+                <div class="date left">
+                    <i class="fa fa-calendar"></i> 23 Feb 2015
+                </div>
+                <div class="views right">
+                    <i class="fa fa-eye"></i> 23123
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
