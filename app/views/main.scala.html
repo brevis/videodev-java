@@ -16,20 +16,20 @@
         <header>
             <div class="wrapper">
                 <div class="logo">
-                    <a href="@routes.Application.home">Video<span>dev</span></a>
+                    <a href="@routes.Application.home()">Video<span>dev</span></a>
                 </div>
 
                 @if(services.MemberService.isLogged) {
                     <div class="nav">
                         <ul>
                             <li><i class="fa fa-user"></i> @(services.MemberService.getUserName)</li>
-                            <li><a href="/feed">Лента</a> <span class="label">@(services.MemberService.getUnreadCount)</span></li>
-                            <li><a href="/logout">Выход</a></li>
+                            <li><a href="@routes.Application.feed()">Лента</a> <span class="label">@(services.MemberService.getUnreadCount)</span></li>
+                            <li><a href="@routes.Authorization.logout()">Выход</a></li>
                         </ul>
                     </div>
                 } else {
                     <div class="login">
-                        <a href="/login" class="zocial facebook">Войти</a>
+                        <a href="@routes.Authorization.login()" class="zocial facebook">Войти</a>
                     </div>
                 }
 
@@ -46,7 +46,7 @@
     <footer>
         <div class="wrapper">
             <p class="left">
-                <span class="copyleft">&copy;</span> <a href="@routes.Application.home">Video<span>dev</span></a> 2015
+                <span class="copyleft">&copy;</span> <a href="@routes.Application.home()">Video<span>dev</span></a> 2015
             </p>
             <p class="right">
                 <a href="@routes.Pages.staticpage("about")">About</a>

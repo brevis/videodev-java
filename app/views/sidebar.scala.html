@@ -13,7 +13,9 @@
         <div class="block categories">
             <h3>Категории</h3>
             <ul>
-
+                @for(c <- Category.find.all()) {
+                    <li><a href="@routes.Application.category(c.slug)">@c.name</a></li>
+                }
             </ul>
         </div>
     </div>

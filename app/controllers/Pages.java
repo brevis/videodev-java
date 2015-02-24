@@ -21,7 +21,6 @@ public class Pages extends Controller {
         if (page == null) return notFound();
 
         Form<Page> pageForm = Form.form(Page.class).fill(page);
-        //return ok(pageForm.toString());
         return ok(editpage.render(page, pageForm));
     }
 
@@ -32,6 +31,7 @@ public class Pages extends Controller {
 
         Form<Page> pageForm = Form.form(Page.class).bindFromRequest();
         if(pageForm.hasErrors()) {
+            // TODO: display errors;
             return badRequest();
         } else {
             Page updatedPage = pageForm.get();

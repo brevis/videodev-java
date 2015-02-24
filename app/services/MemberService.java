@@ -6,23 +6,16 @@ import play.api.libs.json.*;
 
 public class MemberService {
 
-    private static boolean isLogged = false;
-    private static Member member = null;
-
     public static void createAuth() {
-        JsValue jsValue = Json.parse("{\"member_id\":1}");
+        JsValue jsValue = Json.parse("{\"fbid\":\"100001381203370\"}");
         Http.Context.current().session().put("auth", Json.stringify(jsValue));
     }
 
     public static void destroyAuth() {
         Http.Context.current().session().put("auth", "");
-        isLogged = false;
-        member = null;
     }
 
     public static boolean isLogged() {
-        if (isLogged) return true;
-
         // check session for "auth" value
         JsValue authData;
         try{
@@ -35,28 +28,21 @@ public class MemberService {
         // check authData "userId"
         String facebookId;
         try{
-            facebookId = authData.$bslash("member_id").toString();
+            facebookId = authData.$bslash("fbid").toString().replace("\"", ""); // stupid hack to delete quotes
         } catch (Exception e) {
             facebookId = "";
         }
         if (facebookId.equals("")) return false;
 
         // check user
-        Member member = Member.find.where().eq("facebook_id", facebookId).findUnique();
-        if (member != null) {
-            MemberService.member = member;
-            isLogged = true;
-        }
-        return isLogged;
+        Member member = Member.find.where().eq("facebookId", facebookId).findUnique();
+        return member != null;
     }
 
     public static boolean isLoggedAsAdmin() {
         // TODO: move fbid to config;
-        return member != null && member.facebookId.equals("100001381203370");
-    }
-
-    public static Member getMember() {
-        return member;
+        return false;
+        //return member != null && member.facebookId.equals("100001381203370");
     }
 
     public static String getUserName() {

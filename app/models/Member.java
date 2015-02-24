@@ -31,6 +31,11 @@ public class Member extends Model {
         this.facebookId = facebookId;
     }
 
+    public void save() {
+        if (this.facebookId.equals("")) return;
+        super.save();
+    }
+
     /*
     public int getId() {
         return id;
