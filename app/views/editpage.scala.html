@@ -1,0 +1,20 @@
+@(page: Page)(form: Form[Page])
+@main("Edit page: " + page.title) {
+
+    <div class="main full">
+        <div class="block">
+
+            @helper.form(action = routes.Pages.savepage(page.slug), 'class -> "form") {
+                @helper.input(form("title")) { (id, name, value, args) =>
+                    <input type="text" class="form-control" name="@name" id="@id" value="@value">
+                }
+                @helper.input(form("content")) { (id, name, value, args) =>
+                    <textarea class="form-control" rows="20" name="@name" id="@id">@value</textarea>
+                }
+                <button class="btn btn-info">Save</button>
+            }
+
+        </div>
+    </div>
+
+}

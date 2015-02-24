@@ -1,34 +1,51 @@
-# Users schema
+# --- Created by Ebean DDL
+# To stop Ebean DDL generation, remove this comment and start using Evolutions
 
 # --- !Ups
 
-CREATE TABLE "User" (
-    id                  SERIAL PRIMARY KEY,
-    facebookId          INTEGER NOT NULL,
-    firstName           VARCHAR (50) NOT NULL,
-    lastName            VARCHAR (50) NOT NULL,
-    email               VARCHAR (100) NOT NULL,
-    avatar              VARCHAR (255) NOT NULL,
-    registrationDate    TIMESTAMP NOT NULL,
-    lastLoginDate       TIMESTAMP
-);
+create table category (
+  slug                      varchar(255) not null,
+  name                      varchar(255),
+  constraint pk_category primary key (slug))
+;
+
+create table member (
+  facebook_id               varchar(255) not null,
+  first_name                varchar(255),
+  last_name                 varchar(255),
+  email                     varchar(255),
+  registration_date         timestamp,
+  last_login_date           timestamp,
+  constraint pk_member primary key (facebook_id))
+;
+
+create table page (
+  slug                      varchar(255) not null,
+  title                     varchar(255),
+  content                   varchar(255),
+  constraint pk_page primary key (slug))
+;
+
+create sequence category_seq;
+
+create sequence member_seq;
+
+create sequence page_seq;
+
+
+
 
 # --- !Downs
 
-DROP TABLE "User";
+drop table if exists category cascade;
 
+drop table if exists member cascade;
 
-# Categories schema
+drop table if exists page cascade;
 
-# --- !Ups
+drop sequence if exists category_seq;
 
-CREATE TABLE "Category" (
-    id                  SERIAL PRIMARY KEY,
-    name                VARCHAR (100) NOT NULL,
-    slug                VARCHAR (30) NOT NULL,
-    UNIQUE(slug)
-);
+drop sequence if exists member_seq;
 
-# --- !Downs
+drop sequence if exists page_seq;
 
-DROP TABLE "Category";

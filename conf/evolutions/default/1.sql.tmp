@@ -1,0 +1,61 @@
+-- # Users schema
+--
+-- # --- !Ups
+--
+-- CREATE TABLE "User" (
+--     id                  SERIAL PRIMARY KEY,
+--     facebook_id          VARCHAR (50) NOT NULL,
+--     first_name           VARCHAR (50) NOT NULL,
+--     last_name            VARCHAR (50) NOT NULL,
+--     email               VARCHAR (100) NOT NULL,
+--     avatar              VARCHAR (255),
+--     registration_date    TIMESTAMP NOT NULL,
+--     lastLogin_date       TIMESTAMP
+-- );
+--
+-- # --- !Downs
+--
+-- DROP TABLE "User";
+
+# Pages schema
+
+# --- !Ups
+
+CREATE TABLE "Page" (
+    title               VARCHAR (255) NOT NULL,
+    slug                VARCHAR (30) NOT NULL,
+    content             TEXT,
+    UNIQUE(slug)
+);
+
+INSERT INTO "Page" (title, slug, content) VALUES ('About', 'about', '');
+
+# --- !Downs
+
+DROP TABLE "Page";
+
+
+# Categories schema
+
+# --- !Ups
+
+CREATE TABLE "Category" (
+    id                  SERIAL PRIMARY KEY,
+    name                VARCHAR (100) NOT NULL,
+    slug                VARCHAR (30) NOT NULL,
+    UNIQUE(slug)
+);
+
+INSERT INTO "Category" (id, name, slug) VALUES
+(1, 'Java', 'java'),
+(2, 'JavaScript', 'javascript'),
+(3, 'HTML & CSS', 'html-css'),
+(4, 'PHP', 'php'),
+(5, 'Python', 'python'),
+(6, 'Ruby', 'ruby'),
+(7, 'Базы данных', 'database'),
+(8, 'Прочее', 'other');
+
+# --- !Downs
+
+DROP TABLE "Category";

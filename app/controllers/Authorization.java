@@ -1,19 +1,18 @@
 package controllers;
 
-import play.*;
 import play.mvc.*;
-import views.html.*;
+import services.MemberService;
 
 public class Authorization extends Controller {
 
     public static Result login() {
-        // redirect
-        return ok(index.render("Your new application is ready."));
+        MemberService.createAuth();
+        return redirect("/feed");
     }
 
     public static Result logout() {
-        // redirect
-        return ok(index.render("Your new application is ready."));
+        MemberService.destroyAuth();
+        return redirect("/");
     }
     
 }

@@ -103,18 +103,18 @@ header .nav a:hover{
     color: #ffffff;
 }
 
-header .logout{
+header .login{
     float: right;
     margin-top: 5px;
 }
 
-header .logout .zocial.facebook{
+header .login .zocial.facebook{
     color: #ffffff;
     font-size: 8pt;
     margin-top: 0px;
 }
 
-header .logout .zocial.facebook:hover{
+header .login .zocial.facebook:hover{
     text-decoration: none;
 }
 
@@ -179,6 +179,7 @@ section.main .main .block p.cover{
 
 section.main .main .block p.cover img{
     max-width: 100%;
+    margin: 20px 0;
 }
 
 section.main .main .block h2{
@@ -202,6 +203,14 @@ section.main .main .block .meta{
     margin-top: 20px;
     font-size: 10pt;
     color: #c1c0c0;    
+}
+
+section.main .main .block .meta:after{
+    clear: both;
+    display: block;
+    height: 0;
+    font-size: 0;
+    content: "";
 }
 
 section.main .main .block .meta div{

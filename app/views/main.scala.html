@@ -16,27 +16,26 @@
         <header>
             <div class="wrapper">
                 <div class="logo">
-                    <a href="#">Video<span>dev</span></a>
+                    <a href="@routes.Application.home">Video<span>dev</span></a>
                 </div>
 
-                @if(models.User.isLogged()) {
+                @if(services.MemberService.isLogged) {
                     <div class="nav">
                         <ul>
-                            <li><a href="#">Лента</a> <span class="label">4</span></li>
-                            <li><a href="#">Выход</a></li>
+                            <li><i class="fa fa-user"></i> @(services.MemberService.getUserName)</li>
+                            <li><a href="/feed">Лента</a> <span class="label">@(services.MemberService.getUnreadCount)</span></li>
+                            <li><a href="/logout">Выход</a></li>
                         </ul>
                     </div>
                 } else {
-                    <div class="logout">
-                        <a href="#" class="zocial facebook">Войти</a>
+                    <div class="login">
+                        <a href="/login" class="zocial facebook">Войти</a>
                     </div>
                 }
 
             </div>
         </header>
 
-        
-        
         <section class="main">
             <div class="wrapper">
                 @content
@@ -47,10 +46,10 @@
     <footer>
         <div class="wrapper">
             <p class="left">
-                <span class="copyleft">&copy;</span> <a href="#">Video<span>dev</span></a> 2015
+                <span class="copyleft">&copy;</span> <a href="@routes.Application.home">Video<span>dev</span></a> 2015
             </p>
             <p class="right">
-                <a href="about.html">About</a>
+                <a href="@routes.Pages.staticpage("about")">About</a>
             </p>
         </div>
     </footer>
