@@ -10,6 +10,7 @@ public class Application extends Controller {
         return ok(home.render("Your new application is ready."));
     }
 
+    @Security.Authenticated(Secured.class)
     public static Result feed() {
         return ok(home.render("Your new application is ready."));
     }

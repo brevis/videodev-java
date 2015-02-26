@@ -2,20 +2,26 @@ package models;
 
 import models.*;
 import org.junit.*;
-import static org.junit.Assert.*;
 import play.test.WithApplication;
+
+import static org.junit.Assert.*;
+
 import static play.test.Helpers.*;
 
 public class ModelsTest extends WithApplication {
 
     @Before
-    public void setUp() {
-        start(fakeApplication(inMemoryDatabase()));
+    public void setup() {
+        app = fakeApplication(inMemoryDatabase("test"));
     }
 
     @Test
     public void createAndRetrieveMember() {
-        new Member("John", "Doe", "john@doe.com", "1234567890").save();
+        try {
+            new Member("John", "Doe", "john@doe.com", "1234567890").saveMember();
+        } catch (Exception e) {
+            assertTrue(false);
+        }
         Member john = Member.find.where().eq("email", "john@doe.com").findUnique();
         assertNotNull(john);
         assertEquals("John", john.firstName);
@@ -23,24 +29,21 @@ public class ModelsTest extends WithApplication {
 
     @Test
     public void checkUniqueFacebookId() {
-        Member john = new Member("John", "Doe", "john@doe.com", "1234567890");
-        john.save();
-
-        Member jack;
         try {
-            jack = new Member("Jack", "Black", "jack@black.com", "1234567890");
-            jack.save();
+            new Member("John", "Doe", "john@doe.com", "1234567890").saveMember();
+            new Member("Jack", "Black", "jack@black.com", "1234567890").saveMember();
         } catch (Exception e) {
-            jack = null;
+            assertTrue(true);
         }
-        assertNull(jack);
     }
 
     @Test
     public void createMemberWithEmptyFacebookId() {
-        new Member("Jack", "Black", "jack@black.com", "").save();
-        Member jack = Member.find.where().eq("email", "jack@black.com").findUnique();
-        assertNull(jack);
+        try {
+            new Member("Jack", "Black", "jack@black.com", "").saveMember();
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("[facebookId]"));
+        }
     }
 
 }

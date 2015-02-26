@@ -3,7 +3,7 @@ package controllers;
 import models.Page;
 import play.data.Form;
 import play.mvc.*;
-import services.MemberService;
+import services.AuthService;
 import views.html.*;
 import views.html.staticpage;
 
@@ -16,7 +16,7 @@ public class Pages extends Controller {
     }
 
     public static Result editpage(String slug) {
-        if (!MemberService.isLoggedAsAdmin()) return redirect("/" + slug + ".html");
+        if (!AuthService.isLoggedAsAdmin()) return redirect("/" + slug + ".html");
         Page page = Page.find.where().eq("slug", slug).findUnique();
         if (page == null) return notFound();
 
@@ -25,7 +25,7 @@ public class Pages extends Controller {
     }
 
     public static Result savepage(String slug) {
-        if (!MemberService.isLoggedAsAdmin()) return redirect("/" + slug + ".html");
+        if (!AuthService.isLoggedAsAdmin()) return redirect("/" + slug + ".html");
         Page page = Page.find.where().eq("slug", slug).findUnique();
         if (page == null) return notFound();
 

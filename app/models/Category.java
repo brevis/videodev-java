@@ -1,14 +1,12 @@
 package models;
 
-import play.db.DB;
-import play.db.ebean.Model;
+import play.db.*;
+import play.mvc.Http;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
+import javax.persistence.*;
+import play.db.ebean.*;
+
+import java.util.List;
 
 @Entity
 public class Category extends Model {
@@ -18,11 +16,22 @@ public class Category extends Model {
 
     public String name;
 
-    public static Finder<String, Category> find = new Finder<String, Category>(String.class, Category.class);
+    public static Model.Finder<String, Category> find = new Model.Finder<>(String.class, Category.class);
 
     public Category(String name, String slug) {
         this.name = name;
         this.slug = slug;
+    }
+
+    public static List<Category> getActiveCategories() {
+        List<Category> categories = find.findList();
+        return categories;
+
+        /*
+        return find.where()
+                .eq("lessons_cont > 0", false)
+                .findList();
+        */
     }
 
 }

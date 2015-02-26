@@ -3,7 +3,7 @@
 
     <div class="main full">
         <div class="block">
-            @if(services.MemberService.isLoggedAsAdmin) {
+            @if(services.AuthService.isLoggedAsAdmin) {
                 <a href="@routes.Pages.editpage(page.slug)" class="right btn btn-danger btn-sm">Edit page</a>
             }
             <h2>@page.title</h2>

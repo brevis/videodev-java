@@ -1,6 +1,6 @@
 <div class="sidebar">
     <div class="fixedcontainer">
-        @if(services.MemberService.isLogged()) {
+        @if(services.AuthService.isLogged) {
             <div class="block">
                 <h3>Пульт</h3>
                 <ul>
@@ -13,10 +13,11 @@
         <div class="block categories">
             <h3>Категории</h3>
             <ul>
-                @for(c <- Category.find.all()) {
-                    <li><a href="@routes.Application.category(c.slug)">@c.name</a></li>
-                }
+            @for(c <- Category.getActiveCategories) {
+                <li><a href="@routes.Application.category(c.slug)">@c.name</a></li>
+            }
             </ul>
         </div>
+
     </div>
 </div>

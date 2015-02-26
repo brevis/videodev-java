@@ -17,8 +17,8 @@ POST        /editpage/:slug             controllers.Pages.savepage(slug)
 GET         /lessons/:id                controllers.Application.lessons(id)
 
 # Authorization
-GET         /login                      controllers.Authorization.login()
-GET         /logout                     controllers.Authorization.logout()
+GET         /login                      controllers.Auth.login()
+GET         /logout                     controllers.Auth.logout()
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/static/*file        controllers.Assets.at(path="/public", file)

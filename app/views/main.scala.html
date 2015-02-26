@@ -12,6 +12,24 @@
     <!--[if IE]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 <body>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '@services.AuthService.getFacebookAppId',
+                xfbml: true,
+                version: 'v2.1'
+            });
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/ru_RU/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <div id="content">
         <header>
             <div class="wrapper">
@@ -19,17 +37,17 @@
                     <a href="@routes.Application.home()">Video<span>dev</span></a>
                 </div>
 
-                @if(services.MemberService.isLogged) {
+                @if(services.AuthService.isLogged) {
                     <div class="nav">
                         <ul>
-                            <li><i class="fa fa-user"></i> @(services.MemberService.getUserName)</li>
-                            <li><a href="@routes.Application.feed()">Лента</a> <span class="label">@(services.MemberService.getUnreadCount)</span></li>
-                            <li><a href="@routes.Authorization.logout()">Выход</a></li>
+                            <li><i class="fa fa-user"></i> @(services.AuthService.getUserName)</li>
+                            <li><a href="@routes.Application.feed()">Лента</a> <span class="label">@(services.AuthService.getUnreadCount)</span></li>
+                            <li><a href="@routes.Auth.logout()">Выход</a></li>
                         </ul>
                     </div>
                 } else {
                     <div class="login">
-                        <a href="@routes.Authorization.login()" class="zocial facebook">Войти</a>
+                        <fb:login-button scope="public_profile,email" onlogin="checkFBLoginState();"></fb:login-button>
                     </div>
                 }
 
@@ -38,6 +56,7 @@
 
         <section class="main">
             <div class="wrapper">
+                <div id="status"></div>
                 @content
             </div>
         </section>
