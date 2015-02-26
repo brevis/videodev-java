@@ -9,12 +9,7 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 public class ModelsTest extends WithApplication {
-
-    @Before
-    public void setup() {
-        app = fakeApplication(inMemoryDatabase("test"));
-    }
-
+    
     @Test
     public void createAndRetrieveMember() {
         try {
