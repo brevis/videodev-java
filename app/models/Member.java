@@ -18,7 +18,7 @@ public class Member extends Model {
     public Date registrationDate;
     public Date lastLoginDate;
 
-    public static Model.Finder<String, Member> find = new Model.Finder<>(String.class, Member.class);
+    public static Model.Finder<String, Member> find = new Model.Finder<String, Member>(String.class, Member.class);
 
     public Member(String firstName, String lastName, String email, String facebookId) {
         this.firstName = firstName;

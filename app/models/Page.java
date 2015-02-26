@@ -18,7 +18,7 @@ public class Page extends Model {
     @Constraints.Required
     public String content;
 
-    public static Model.Finder<String, Page> find = new Model.Finder<>(String.class, Page.class);
+    public static Model.Finder<String, Page> find = new Model.Finder<String, Page>(String.class, Page.class);
 
     public Page(String slug, String title, String content) {
         this.slug = slug;

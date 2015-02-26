@@ -16,7 +16,7 @@ public class Category extends Model {
 
     public String name;
 
-    public static Model.Finder<String, Category> find = new Model.Finder<>(String.class, Category.class);
+    public static Model.Finder<String, Category> find = new Model.Finder<String, Category>(String.class, Category.class);
 
     public Category(String name, String slug) {
         this.name = name;
@@ -24,14 +24,9 @@ public class Category extends Model {
     }
 
     public static List<Category> getActiveCategories() {
+        // TODO: implement;
         List<Category> categories = find.findList();
         return categories;
-
-        /*
-        return find.where()
-                .eq("lessons_cont > 0", false)
-                .findList();
-        */
     }
 
 }
