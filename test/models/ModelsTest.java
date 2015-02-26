@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 public class ModelsTest extends WithApplication {
-    
+
     @Test
     public void createAndRetrieveMember() {
         try {
