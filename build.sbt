@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
 
-pipelineStages := Seq(rjs, uglify, digest, gzip)
+pipelineStages := Seq(uglify, digest, gzip)
 
 javaOptions in Test ++= Seq(
   "-Dconfig.file=conf/test.conf"

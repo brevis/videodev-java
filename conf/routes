@@ -3,25 +3,25 @@
 # ~~~~
 
 # Home staticpage
-GET         /                      controllers.Application.home()
+GET         /                           controllers.Application.home()
 
 # Feed staticpage
-GET         /feed                  controllers.Application.feed()
+GET         /feed                       controllers.Application.feed()
 
 # About staticpage
-GET         /:slug.html            controllers.Pages.staticpage(slug)
-GET         /editpage/:slug        controllers.Pages.editpage(slug)
-POST        /editpage/:slug        controllers.Pages.savepage(slug)
+GET         /:slug.html                 controllers.Pages.staticpage(slug)
+GET         /editpage/:slug             controllers.Pages.editpage(slug)
+POST        /editpage/:slug             controllers.Pages.savepage(slug)
 
 # Post staticpage
-GET         /lessons/:id           controllers.Application.lessons(id)
+GET         /lessons/:id                controllers.Application.lessons(id)
 
 # Authorization
-GET         /login                 controllers.Auth.login()
-GET         /logout                controllers.Auth.logout()
+GET         /login                      controllers.Auth.login()
+GET         /logout                     controllers.Auth.logout()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file          controllers.ExternalAssets.at(path="/public", file: Asset)
+GET         /assets/*file        controllers.Assets.at(path="/public", file)
 
 # Categories
-GET         /:slug                 controllers.Application.category(slug)
+GET         /:slug                      controllers.Application.category(slug)
