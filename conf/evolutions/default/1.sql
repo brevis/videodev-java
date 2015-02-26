@@ -37,15 +37,11 @@ create sequence page_seq;
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
+drop table if exists category cascade;
 
-drop table if exists category;
+drop table if exists member cascade;
 
-drop table if exists member;
-
-drop table if exists page;
-
-SET REFERENTIAL_INTEGRITY TRUE;
+drop table if exists page cascade;
 
 drop sequence if exists category_seq;
 
