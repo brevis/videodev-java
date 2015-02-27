@@ -3,25 +3,28 @@
 # ~~~~
 
 # Home staticpage
-GET         /                           controllers.Application.home()
-
-# Feed staticpage
-GET         /feed                       controllers.Application.feed()
+GET         /                          controllers.Application.home()
 
 # About staticpage
-GET         /:slug.html                 controllers.Pages.staticpage(slug)
-GET         /editpage/:slug             controllers.Pages.editpage(slug)
-POST        /editpage/:slug             controllers.Pages.savepage(slug)
+GET         /:slug.html                controllers.Pages.page(slug)
+GET         /editpage/:slug            controllers.Pages.edit(slug)
+POST        /editpage/:slug            controllers.Pages.update(slug)
 
-# Post staticpage
-GET         /lessons/:id                controllers.Application.lessons(id)
+# Lessons
+GET         /lessons/my                controllers.Lessons.my()
+GET         /lessons/add               controllers.Lessons.add()
+POST        /lessons/add               controllers.Lessons.save()
+GET         /lessons/:id/edit          controllers.Lessons.edit(id)
+POST        /lessons/:id/edit          controllers.Lessons.update(id)
+GET         /lessons/:id/delete        controllers.Lessons.delete(id)
+GET         /lessons/:id               controllers.Lessons.view(id)
 
 # Authorization
-GET         /login                      controllers.Auth.login()
-GET         /logout                     controllers.Auth.logout()
+GET         /login                     controllers.Auth.login()
+GET         /logout                    controllers.Auth.logout()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file        controllers.Assets.at(path="/public", file)
+GET         /assets/*file              controllers.Assets.at(path="/public", file)
 
 # Categories
-GET         /:slug                      controllers.Application.category(slug)
+GET         /:slug                     controllers.Application.category(slug)

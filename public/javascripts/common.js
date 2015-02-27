@@ -11,6 +11,8 @@ function checkFBLoginState() {
 
 $(function(){
 
+
+
     // fixed sidebar
     var listval = $('.fixedcontainer')[0].offsetTop;
     $(document).scroll(function() {

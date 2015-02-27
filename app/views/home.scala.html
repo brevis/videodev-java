@@ -1,22 +1,19 @@
-@(title: String)
-
-@main(title) {
+@main() {
 
     @sidebar()
 
     <div class="main">
-        <div class="block">
-            <select class="form-control">
-                <option value="">Все категории</option>
-                <option value="">Java</option>
-                <option value="">JavaScript</option>
-                <option value="">PHP</option>
-                <option value="">Прочее</option>
-            </select>
+        <div class="block filter">
+            <div class="newonly">
+                <a href="" class="btn btn-default btn-xs active"><i class="fa fa-check-square-o"></i> Только новые</a>
+            </div>
+            <div class="markasread">
+                <a href="" class="btn btn-default btn-xs">Отметить все как прочитанные</a>
+            </div>
         </div>
         <div class="block new">
-            <span class="label label-success">Java</span> <span class="label course">Курс</span> <button class="right btn btn-info btn-xs" onclick="$(this).toggleClass('active').blur();"><i class="fa fa-check-square-o"></i> Следить</button>
-            <h2><a href="/lessons/1">Lorem isum dolor sit amet</a></h2>
+            <span class="label label-success">Java</span> <span class="label course">Курс</span>
+            <h2><a href="@routes.Lessons.view("1")">Lorem isum dolor sit amet</a></h2>
             <div class="description">
                 <p class="cover">
                     <img src="http://www.fandroid.info/wp-content/uploads/2015/02/JAVA-ICON.png" alt="">
@@ -41,7 +38,7 @@
         <div class="block">
             <span class="label label-success">Java</span><!-- <span class="label lesson">Урок</span> -->
             <h2 class="clear">
-                <a href="/lessons/2" class="left">Lorem isum dolor sit amet Lorem isum dolor sit amet Lorem isum dolor sit amet</a>
+                <a href="@routes.Lessons.view("1")" class="left">Lorem isum dolor sit amet Lorem isum dolor sit amet Lorem isum dolor sit amet</a>
             </h2>
             <div class="description">
                 <p class="cover">

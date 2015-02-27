@@ -1,46 +1,43 @@
 package controllers;
 
 import models.Page;
-import play.data.Form;
+import play.data.*;
 import play.mvc.*;
 import services.AuthService;
 import views.html.*;
-import views.html.staticpage;
 
 public class Pages extends Controller {
 
-    public static Result staticpage(String slug) {
+    public static Result page(String slug) {
         Page page = Page.find.where().eq("slug", slug).findUnique();
-        if (page == null) return notFound();
-        return ok(staticpage.render(page));
+        if (page == null) return notFound(errors.render("Page not found"));
+
+        return ok(views.html.page.page.render(page));
     }
 
-    public static Result editpage(String slug) {
+    public static Result edit(String slug) {
         if (!AuthService.isLoggedAsAdmin()) return redirect("/" + slug + ".html");
         Page page = Page.find.where().eq("slug", slug).findUnique();
-        if (page == null) return notFound();
+        if (page == null) return notFound(errors.render("Page not found"));
 
         Form<Page> pageForm = Form.form(Page.class).fill(page);
-        return ok(editpage.render(page, pageForm));
+        return ok(views.html.page.edit.render(page, pageForm));
     }
 
-    public static Result savepage(String slug) {
+    public static Result update(String slug) {
         if (!AuthService.isLoggedAsAdmin()) return redirect("/" + slug + ".html");
         Page page = Page.find.where().eq("slug", slug).findUnique();
-        if (page == null) return notFound();
+        if (page == null) return notFound(errors.render("Page not found"));
 
         Form<Page> pageForm = Form.form(Page.class).bindFromRequest();
         if(pageForm.hasErrors()) {
-            // TODO: display errors;
-            return badRequest();
+            return badRequest(views.html.page.edit.render(page, pageForm));
         } else {
-            Page updatedPage = pageForm.get();
-            updatedPage.slug = page.slug;
-            updatedPage.save();
+            page = pageForm.get();
+            page.slug = slug;
+            page.update();
             return redirect("/" + slug + ".html");
         }
-
     }
-
 
 }

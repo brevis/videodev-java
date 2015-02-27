@@ -4,8 +4,8 @@
             <div class="block">
                 <h3>Пульт</h3>
                 <ul>
-                    <li><a href="/add">Добавить контент</a></li>
-                    <li><a href="/my">Мой контент</a></li>
+                    <li><a href="@routes.Lessons.add()">Добавить контент</a></li>
+                    <li><a href="@routes.Lessons.my()">Мой контент</a></li>
                 </ul>
             </div>
         }
@@ -13,9 +13,10 @@
         <div class="block categories">
             <h3>Категории</h3>
             <ul>
-            @for(c <- Category.getActiveCategories) {
-                <li><a href="@routes.Application.category(c.slug)">@c.name</a></li>
-            }
+                <li><a href="@routes.Application.home()">Все</a></li>
+                @for(c <- Category.getActiveCategories) {
+                    <li><a href="@routes.Application.category(c.slug)">@c.name</a></li>
+                }
             </ul>
         </div>
 

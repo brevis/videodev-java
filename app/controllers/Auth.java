@@ -8,12 +8,8 @@ import services.AuthService;
 public class Auth extends Controller {
 
     public static Result login() {
-        String accessToken = request().getQueryString("accessToken");
-        Member member = AuthService.loginWithAccessToken(accessToken);
-        if (member != null) {
-            AuthService.createAuth(member);
-            return redirect("/feed");
-        }
+        Member member = AuthService.loginWithAccessToken(request().getQueryString("accessToken"));
+        if (member != null) AuthService.createAuth(member);
         return redirect("/");
     }
 

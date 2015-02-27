@@ -16,9 +16,9 @@ public class ApplicationTest extends WithApplication {
 
     @Test
     public void renderTemplate() {
-        Content html = views.html.home.render("Your new application is ready.");
+        Content html = views.html.home.render();
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Your new application is ready.");
+        assertThat(contentAsString(html)).contains("Videodev");
     }
 
 }

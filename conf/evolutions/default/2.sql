@@ -1,4 +1,4 @@
-# category initial content
+# categories initial content
 
 # --- !Ups
 
@@ -22,3 +22,13 @@ delete from category where slug='python';
 delete from category where slug='ruby';
 delete from category where slug='database';
 delete from category where slug='other';
+
+# pages initial content
+
+# --- !Ups
+
+insert into page (slug, title, content) values ('about', 'About', '');
+
+# --- !Downs
+
+delete from page where slug='about';

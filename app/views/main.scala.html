@@ -1,14 +1,16 @@
-@(title: String = "Videodev")(content: Html)
+@(title: String = "Видеоуроки по программированию")(content: Html)
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>@title</title>
+    <title>@title@if(title.nonEmpty){ // Videodev}</title>
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/font-awesome.min.css")">
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/zsocial.css")">
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/videodev.css")">
+    <script src="@routes.Assets.at("javascripts/jquery-2.1.3.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
     <!--[if IE]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 <body>
@@ -41,7 +43,7 @@
                     <div class="nav">
                         <ul>
                             <li><i class="fa fa-user"></i> @(services.AuthService.getUserName)</li>
-                            <li><a href="@routes.Application.feed()">Лента</a> <span class="label">@(services.AuthService.getUnreadCount)</span></li>
+                            <li><a href="@routes.Application.home()">Лента</a> <span class="label">@(services.AuthService.getUnreadCount)</span></li>
                             <li><a href="@routes.Auth.logout()">Выход</a></li>
                         </ul>
                     </div>
@@ -68,13 +70,11 @@
                 <span class="copyleft">&copy;</span> <a href="@routes.Application.home()">Video<span>dev</span></a> 2015
             </p>
             <p class="right">
-                <a href="@routes.Pages.staticpage("about")">About</a>
+                <a href="@routes.Pages.page("about")">About</a>
             </p>
         </div>
     </footer>
 
-    <script src="@routes.Assets.at("javascripts/jquery-2.1.3.min.js")"></script>
-    <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
     <script src="@routes.Assets.at("javascripts/common.js")"></script>
 
 </body>

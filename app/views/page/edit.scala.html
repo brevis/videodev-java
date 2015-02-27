@@ -4,7 +4,7 @@
     <div class="main full">
         <div class="block">
 
-            @helper.form(action = routes.Pages.savepage(page.slug), 'class -> "form") {
+            @helper.form(action = routes.Pages.update(page.slug), 'class -> "form") {
                 @helper.input(form("title")) { (id, name, value, args) =>
                     <input type="text" class="form-control" name="@name" id="@id" value="@value">
                 }

@@ -75,6 +75,16 @@ public class AuthService {
         Http.Context.current().session().clear();
     }
 
+    public static Member getCurrentMember() {
+        Member member;
+        try{
+            member = (Member)Cache.get("member:" + Http.Context.current().session().get("uuid"));
+        } catch (Exception e) {
+            member = null;
+        }
+        return member;
+    }
+
     public static boolean isLogged() {
         return getCurrentMember() != null;
     }
@@ -103,16 +113,6 @@ public class AuthService {
     }
 
     /*-------------------------------------------------------------------------*/
-
-    private static Member getCurrentMember() {
-        Member member;
-        try{
-            member = (Member)Cache.get("member:" + Http.Context.current().session().get("uuid"));
-        } catch (Exception e) {
-            member = null;
-        }
-        return member;
-    }
 
     private static String getUrlContent(String url) throws Exception {
         URL page = new URL(url);

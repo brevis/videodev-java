@@ -16,7 +16,10 @@ public class Category extends Model {
 
     public String name;
 
-    public static Model.Finder<String, Category> find = new Model.Finder<String, Category>(String.class, Category.class);
+    @OneToMany
+    public List<Course> courses;
+
+    public static Model.Finder<String, Category> find = new Model.Finder<>(String.class, Category.class);
 
     public Category(String name, String slug) {
         this.name = name;

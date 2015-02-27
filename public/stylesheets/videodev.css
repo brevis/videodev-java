@@ -169,6 +169,30 @@ section.main .main .block{
     margin-bottom: 20px;
 }
 
+section.main .main .block.error{
+    min-height: 300px;
+}
+
+section.main .main .block.filter{
+    height: 62px;
+}
+
+section.main .main .block.filter:after{
+    display: block;
+    clear: both;
+    height: 0;
+    font-size: 0;
+    content: "";
+}
+
+section.main .main .block.filter .newonly{
+    float: left;
+}
+
+section.main .main .block.filter .markasread{
+    float: right;
+}
+
 section.main .main .block.new{
     border-top: 3px solid #f4793d;
 }

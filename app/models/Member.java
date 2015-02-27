@@ -3,7 +3,9 @@ package models;
 import play.db.*;
 import play.mvc.Http;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 import play.db.ebean.*;
 
@@ -18,7 +20,13 @@ public class Member extends Model {
     public Date registrationDate;
     public Date lastLoginDate;
 
-    public static Model.Finder<String, Member> find = new Model.Finder<String, Member>(String.class, Member.class);
+    @OneToMany
+    public List<Course> courses = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    public List<Lesson> viewHistory = new ArrayList<>();
+
+    public static Model.Finder<String, Member> find = new Model.Finder<>(String.class, Member.class);
 
     public Member(String firstName, String lastName, String email, String facebookId) {
         this.firstName = firstName;
@@ -30,11 +38,16 @@ public class Member extends Model {
     @Deprecated
     public void save() {}
 
+
     public void saveMember() throws Exception {
         if (!this.facebookId.matches("\\d+")) {
             throw new Exception("[facebookId] field empty");
         }
         super.save();
+    }
+
+    public String getName() {
+        return this.firstName + " " + this.lastName;
     }
 
 }
