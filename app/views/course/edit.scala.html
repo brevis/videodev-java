@@ -39,7 +39,7 @@
                                 <p class="help-block">@form.getError("category")</p>
                             </div>
                             <div class="form-group@if(form.hasError("title")){ has-error}">
-                                <input type="text" name="lesson[title]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getValue("title")">
+                                <input type="text" name="lesson[title]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getValue("title")" maxlength="60">
                                 <p class="help-block">@form.getError("title")</p>
                             </div>
                             <div class="form-group@if(form.hasError("description")){ has-error}">
@@ -48,18 +48,13 @@
                             </div>
                             <div class="form-group@if(form.hasError("cover")){ has-error}">
                                 <input type="hidden" name="lesson[coverId]" id="lessonCoverId" value="@form.getValue("coverId")">
-                                <input type="text" name="lesson[coverUrl]" class="coverinput form-control" id="lessonCoverUrl" placeholder="URL изображения" value="">
-                                <div>
-                                    <div class="left">
-                                        <img id="lessonCoverImage" src="@if(!form.getValue("coverId").equals("")){@routes.Covers.get(form.getValue("coverId"))}" alt=""@if(form.getValue("coverId").equals("")){ style="display: none;}>
-                                    </div>
-                                    <div class="left">
-                                        @if(!form.getValue("coverId").equals("")) {
-                                            <button type="button" class="deletecover btn btn-danger btn-xs" data-type="lesson"><i class="fa fa-trash-o"></i></button>
-                                        }
-                                    </div>
+                                <input type="url" name="lesson[coverUrl]" class="coverinput form-control" id="lessonCoverUrl" placeholder="URL изображения" value="@form.getValue("coverUrl")"@if(!form.getValue("coverId").equals("")){ disabled="disabled"}>
+                                <div class="coverimage">
+                                    <img id="lessonCoverImage" src="@if(!form.getValue("coverId").equals("")){@routes.Covers.get(form.getValue("coverId"))}" alt="" style="max-width: 300px;max-height: 200px;@if(form.getValue("coverId").equals("")){ display: none}">
+                                    @if(!form.getValue("coverId").equals("")) {
+                                        <button type="button" class="deletecover btn btn-danger btn-xs" data-type="lesson"><i class="fa fa-trash-o"></i></button>
+                                    }
                                 </div>
-
                                 <p class="help-block">@form.getError("cover")</p>
                             </div>
                             <div class="form-group@if(form.hasLessonError(0, "playerCode")){ has-error}">
@@ -88,7 +83,7 @@
                                             <p class="help-block">@form.getError("category")</p>
                                         </div>
                                         <div class="form-group@if(form.hasError("title")){ has-error}">
-                                            <input type="text" name="course[title]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getValue("title")">
+                                            <input type="text" name="course[title]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getValue("title")" maxlength="120">
                                             <p class="help-block">@form.getError("title")</p>
                                         </div>
                                         <div class="form-group@if(form.hasError("description")){ has-error}">
@@ -97,18 +92,13 @@
                                         </div>
                                         <div class="form-group@if(form.hasError("cover")){ has-error}">
                                             <input type="hidden" name="course[coverId]" id="courseCoverId" value="@form.getValue("coverId")">
-                                            <input type="text" name="course[coverUrl]" class="coverinput form-control" id="courseCoverUrl" placeholder="URL изображения" value="">
-                                            <div>
-                                                <div class="left">
-                                                    <img id="courseCoverImage" src="@if(!form.getValue("coverId").equals("")){@routes.Covers.get(form.getValue("coverId"))}" alt=""@if(form.getValue("coverId").equals("")){ style="display: none;}>
-                                                </div>
-                                                <div class="left">
+                                            <input type="url" name="course[coverUrl]" class="coverinput form-control" id="courseCoverUrl" placeholder="URL изображения" value="@form.getValue("coverUrl")"@if(!form.getValue("coverId").equals("")){ disabled="disabled"}>
+                                            <div class="coverimage">
+                                                <img id="courseCoverImage" src="@if(!form.getValue("coverId").equals("")){@routes.Covers.get(form.getValue("coverId"))}" alt="" style="max-width: 300px;height: 200px;@if(form.getValue("coverId").equals("")){ display: none}">
                                                 @if(!form.getValue("coverId").equals("")) {
                                                     <button type="button" class="deletecover btn btn-danger btn-xs" data-type="course"><i class="fa fa-trash-o"></i></button>
                                                 }
-                                                </div>
                                             </div>
-
                                             <p class="help-block">@form.getError("cover")</p>
                                         </div>
                                     </div>
@@ -126,7 +116,7 @@
                                         </div>
                                         <div class="accordion-body collapse in">
                                             <div class="form-group@if(form.hasLessonError(i, "lessonTitle")){ has-error}">
-                                                <input type="text" name="course[lessonTitle]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getLessonValue(i, "lessonTitle")">
+                                                <input type="text" name="course[lessonTitle]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getLessonValue(i, "lessonTitle")" maxlength="120">
                                                 <p class="help-block">@form.getLessonError(i, "lessonTitle")</p>
                                             </div>
                                             <div class="form-group@if(form.hasLessonError(i, "playerCode")){ has-error}">
@@ -167,7 +157,7 @@
             '</div>' +
             '<div class="accordion-body collapse in">' +
                 '<div class="form-group">' +
-                    '<input type="text" name="course[lessonTitle]" class="form-control" required="required" placeholder="Заголовок*" value="">' +
+                    '<input type="text" name="course[lessonTitle]" class="form-control" required="required" placeholder="Заголовок*" value="" maxlength="120">' +
                     '<p class="help-block"></p>' +
                 '</div>' +
                 '<div class="form-group">' +

@@ -4,6 +4,8 @@
 
 insert into category (name, slug) values
 ('Java', 'java'),
+('C / C++ / C#', 'c'),
+('Objective C', 'objc'),
 ('JavaScript', 'javascript'),
 ('HTML & CSS', 'html-css'),
 ('PHP', 'php'),
@@ -15,6 +17,8 @@ insert into category (name, slug) values
 # --- !Downs
 
 delete from category where slug='java';
+delete from category where slug='c';
+delete from category where slug='objc';
 delete from category where slug='javascript';
 delete from category where slug='html-css';
 delete from category where slug='php';

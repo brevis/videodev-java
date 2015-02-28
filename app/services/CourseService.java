@@ -2,7 +2,17 @@ package services;
 
 import helpers.CourseForm;
 import models.*;
+import play.api.mvc.Codec;
+import play.core.j.JavaResults;
+import play.mvc.Result;
+import play.mvc.Results;
 
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,12 +23,13 @@ public class CourseService {
      *
      * @param form CourseForm
      * @return Course
+     * @throws Exception
      */
-    public static Course saveCourse(CourseForm form) {
+    public static Course saveCourse(CourseForm form) throws Exception {
         // TODO: find how to escape from .save() for each model and use .save() only for parent model
 
         Category category = Category.find.byId(form.getValue("category"));
-        if (category == null) return null;
+        if (category == null) throw new Exception("[category] is wrong");
 
         Member member = AuthService.getCurrentMember();
 
@@ -52,10 +63,11 @@ public class CourseService {
      * @param course Course
      * @param form CourseForm
      * @return Course
+     * @throws Exception
      */
-    public static Course updateCourse(Course course, CourseForm form) {
+    public static Course updateCourse(Course course, CourseForm form) throws Exception {
         Category category = Category.find.byId(form.getValue("category"));
-        if (category == null) return null;
+        if (category == null) throw new Exception("[category] is wrong");
 
         course.category = category;
         course.title = form.getValue("title");
@@ -95,8 +107,30 @@ public class CourseService {
      * @param url String
      * @return Cover
      */
-    public static Cover saveCover(String url) {
-        return null;
+    public static Cover saveCover(String url) throws Exception {
+        Cover cover = Cover.find.where().eq("url", url).findUnique();
+        if (cover != null) return cover;
+
+        URLConnection conn = new URL(url).openConnection();
+        String contentType = conn.getHeaderField("Content-Type").toLowerCase();
+        if (!Arrays.asList(Cover.availableContentTypes).contains(contentType)) throw new Exception("Incorrect Content-type");
+
+        conn.setReadTimeout(3000);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int bytesRead = -1;
+        byte[] buffer = new byte[1024];
+        while ((bytesRead = conn.getInputStream().read(buffer)) != -1) {
+            baos.write(buffer, 0, bytesRead);
+            if (baos.size() > 1024 * 300) throw new Exception("Image size bigger than 300 kb");
+        }
+
+        if (baos.size() < 1024) throw new Exception("Image is too small");
+        // TODO: check image width & height instead of size
+
+        cover = new Cover(baos.toByteArray(), contentType, url);
+        cover.save();
+
+        return cover;
     }
 
     /**

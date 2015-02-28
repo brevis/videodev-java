@@ -1,0 +1,83 @@
+@(currentPage: com.avaje.ebean.Page[Course])(cslug: String)
+
+@main("Мой контент") {
+
+    @sidebar()
+
+    <div class="main">
+        <div class="block">
+            <h2>Мой контент</h2>
+
+            <div class="filter">
+                <form action="@routes.Courses.my()" method="get">
+                    <select name="cslug" class="form-control" onchange="$(this).parents('form').submit();">
+                        <option value="">Все категории</option>
+                        @for(c <- Category.getActiveCategories) {
+                            <option value="@c.slug"@if(c.slug.equals(cslug)){ selected="selected"}>@c.name</option>
+                        }
+                    </select>
+                </form>
+            </div>
+
+            <br><br>
+
+            @if(currentPage.getTotalRowCount == 0) {
+                <p>
+                    <em>Пусто :(</em>
+                </p>
+            } else {
+                <form action="" method="post">
+                    <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>Заголовок</th>
+                            <th>Категория</th>
+                            <th>Операции</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(course <- currentPage.getList) {
+                            <tr>
+                                <td><input type="checkbox" name="id" value="@course.id"></td>
+                                <td class="breakall">
+                                    <a href="@routes.Courses.view(course.id.toString)">@course.title</a>
+                                    @if(course.`type`.equals(Course.CourseType.COURSE)){ <span class="label label-info">Курс</span>}
+                                </td>
+                                <td>@course.category.name</td>
+                                <td>
+                                    <a href="@routes.Courses.edit(course.id.toString)" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a>
+                                    <a href="@routes.Courses.delete(course.id.toString)" class="btn btn-danger btn-xs" onclick="return confirm('Вы уверены, что хотите удалить элемент?')"><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    </table>
+
+                    <a href="" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> Удалить выбранные</a>
+                </form>
+
+                @if(currentPage.getTotalPageCount > 1) {
+                    <ul class="pagination">
+                        @if(currentPage.hasPrev) {
+                            <li class="next">
+                                <a href="@routes.Courses.my(cslug, currentPage.getPageIndex)">&larr;</a>
+                            </li>
+                        }
+                        @for(p <- 1 to currentPage.getTotalPageCount) {
+                            <li@if(currentPage.getPageIndex + 1 == p){ class="active"}>
+                                <a href="@routes.Courses.my(cslug, p)">@p</a>
+                            </li>
+                        }
+                        @if(currentPage.hasNext) {
+                            <li class="next">
+                                <a href="@routes.Courses.my(cslug, currentPage.getPageIndex + 2)">&rarr;</a>
+                            </li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+
+    </div>
+}

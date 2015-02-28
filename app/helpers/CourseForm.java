@@ -183,6 +183,11 @@ public class CourseForm {
         return count;
     }
 
+    /**
+     * Validate form
+     *
+     * @return boolean
+     */
     public boolean isValid() {
         courseErrors = new HashMap<>();
         lessonsErrors = new ArrayList<>();
@@ -199,19 +204,35 @@ public class CourseForm {
         description = description.trim();
         if (description.equals("")) this.addError("description", "required");
 
-        String coverId = "";
-        Cover cover = CourseService.saveCover(this.getValue("coverUrl"));
-        if (cover != null) {
-            coverId = cover.id.toString();
-        } else {
-            try {
-                cover = Cover.find.byId(this.getValue("coverId"));
-            } catch (Exception e) {
-                cover = null;
-            }
-            if (cover != null) coverId = cover.id.toString();
-        }
+        // TODO: refactor next block
+        Cover cover;
+        String coverId = this.getValue("coverId");
+        String coverUrl = this.getValue("coverUrl").trim();
         this.addValue("coverId", coverId);
+        this.addValue("coverUrl", coverUrl);
+        if (coverUrl.equals("")) {
+            if (!coverId.equals("")) {
+                try {
+                    cover = Cover.find.byId(coverId);
+                } catch (Exception e) {
+                    cover = null;
+                }
+                if (cover == null) this.addValue("coverId", "");
+            }
+        } else if (coverUrl.matches("^https?://.+")) {
+            try {
+                cover = CourseService.saveCover(coverUrl);
+                if (cover != null) {
+                    this.addValue("coverId", cover.id.toString());
+                    this.addValue("coverUrl", "");
+                }
+            } catch (Exception e) {
+                this.addError("cover", "incorrect.image");
+            }
+        } else {
+            this.addError("cover", "incorrect");
+        }
+
 
         // Lessons data
         for(int i = 0; i<getLessonsCount(); i++) {

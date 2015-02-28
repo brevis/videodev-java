@@ -6,6 +6,7 @@ import play.mvc.Http;
 import javax.persistence.*;
 import play.db.ebean.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,7 +29,7 @@ public class Category extends Model {
 
     public static List<Category> getActiveCategories() {
         // TODO: implement;
-        List<Category> categories = find.findList();
+        List<Category> categories = find.all();
         return categories;
     }
 

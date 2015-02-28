@@ -11,7 +11,7 @@ GET         /editpage/:slug            controllers.Pages.edit(slug)
 POST        /editpage/:slug            controllers.Pages.update(slug)
 
 # Lessons
-GET         /courses/my                controllers.Courses.my()
+GET         /courses/my                controllers.Courses.my(cslug:String ?= "", page:Integer ?= 0)
 GET         /courses/add               controllers.Courses.add()
 POST        /courses/add               controllers.Courses.save()
 GET         /courses/:id/edit          controllers.Courses.edit(id)
@@ -21,8 +21,6 @@ GET         /courses/:id               controllers.Courses.view(id)
 
 # Cover
 GET         /cover/:id                 controllers.Covers.get(id)
-POST        /cover                     controllers.Covers.save()
-GET         /cover/:id/delete          controllers.Covers.delete(id)
 
 # Authorization
 GET         /login                     controllers.Auth.login()

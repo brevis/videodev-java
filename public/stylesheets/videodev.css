@@ -263,6 +263,10 @@ form.add .accordion-heading button.deletelesson{
     margin: 8px 8px 0 0;
 }
 
+.deletecover{
+    margin: 20px 5px;
+}
+
 /** accordion */
 .accordion {
   margin-bottom: 20px;
@@ -478,4 +482,8 @@ span.copyleft{
     transform: scaleX(-1);
     filter: FlipH;
     -ms-filter: "FlipH";
+}
+
+.breakall {
+    word-break: break-all;
 }

@@ -32,6 +32,13 @@ $(function(){
     });
     switchTab(activeTab);
 
+    $('.addlesson').on('click', function() {
+        var html = lessonTemplate.replace(/%i%/g, lessonsCount).replace(/%n%/g, lessonsCount + 1);
+        $('#accordioncourse').append(html);
+        lessonsCount++;
+        $('#lessonsCount').val(lessonsCount);
+    });
+
     $(document.body).on('click', '.deletelesson' ,function() {
         if (lessonsCount < 2) return;
         var $el = $(this).parents('.lessongroup');
@@ -50,6 +57,7 @@ $(function(){
         var type = $(this).data('type');
         $('#' + type + 'CoverId').val('');
         $('#' + type + 'CoverImage' ).hide();
+        $('#' + type + 'CoverUrl' ).removeAttr("disabled");
         $(this).hide();
     });
 

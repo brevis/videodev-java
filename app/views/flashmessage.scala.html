@@ -1,23 +1,15 @@
-@defining(flash.get("success")) { m =>
-    @if(m != null) {
-        <div class="alert alert-success" role="alert">@m</div>
-    }
+@if(flash.containsKey("success")) {
+    <div class="alert alert-success" role="alert">@flash.get("success")</div>
 }
 
-@defining(flash.get("info")) { m =>
-    @if(m != null) {
-        <div class="alert alert-info" role="alert">@m</div>
-    }
+@if(flash.containsKey("info")) {
+    <div class="alert alert-info" role="alert">@flash.get("info")</div>
 }
 
-@defining(flash.get("warning")) { m =>
-    @if(m != null) {
-        <div class="alert alert-warning" role="alert">@m</div>
-    }
+@if(flash.containsKey("warning")) {
+    <div class="alert alert-warning" role="alert">@flash.get("warning")</div>
 }
 
-@defining(flash.get("danger")) { m =>
-    @if(m != null) {
-        <div class="alert alert-danger" role="alert">@m</div>
-    }
+@if(flash.containsKey("danger")) {
+    <div class="alert alert-danger" role="alert">@flash.get("danger")</div>
 }

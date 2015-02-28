@@ -1,12 +1,16 @@
 package controllers;
 
+import com.avaje.ebean.PagingList;
 import helpers.CourseForm;
+import javafx.scene.control.Pagination;
 import models.*;
 import play.i18n.Messages;
 import play.mvc.*;
 import services.AuthService;
 import services.CourseService;
 import views.html.*;
+
+import java.util.ArrayList;
 
 public class Courses extends Controller {
 
@@ -15,18 +19,23 @@ public class Courses extends Controller {
     }
 
     @Security.Authenticated(Secured.class)
-    public static Result my() {
-        return ok(home.render());
+    public static Result my(String cslug, Integer page) {
+        return ok(
+                views.html.course.my.render(
+                        Course.page(page, 10, cslug, AuthService.getCurrentMember()),
+                        cslug
+                )
+        );
     }
 
-    //@Security.Authenticated(Secured.class) // TODO: remove after testing;
+    @Security.Authenticated(Secured.class)
     public static Result add() {
         String formAction = routes.Courses.save().absoluteURL(request());
         CourseForm form = CourseForm.getFormFromRequest(request().body().asFormUrlEncoded(), Course.CourseType.LESSON);
         return ok(views.html.course.edit.render("add", formAction, form));
     }
 
-    //@Security.Authenticated(Secured.class) // TODO: remove after testing;
+    @Security.Authenticated(Secured.class)
     public static Result save() {
         String formAction = routes.Courses.save().absoluteURL(request());
 
@@ -47,15 +56,16 @@ public class Courses extends Controller {
                 flash("success", Messages.get(course.type.equals(Course.CourseType.COURSE) ? "course.saved" : "lesson.saved"));
                 return redirect(routes.Courses.edit("" + course.id));
             } catch (Exception e) {
-                flash("danger", Messages.get("error.unknown"));
+                flash("danger", e.getMessage());
             }
+        } else {
+            flash("danger", Messages.get("error"));
         }
 
-        flash("danger", Messages.get("error"));
         return ok(views.html.course.edit.render("add", formAction, form));
     }
 
-    //@Security.Authenticated(Secured.class) // TODO: remove after testing;
+    @Security.Authenticated(Secured.class)
     public static Result edit(String id) {
         String formAction = routes.Courses.update(id).absoluteURL(request());
 
@@ -72,7 +82,7 @@ public class Courses extends Controller {
         return ok(views.html.course.edit.render("edit", formAction, form));
     }
 
-    //@Security.Authenticated(Secured.class) // TODO: remove after testing;
+    @Security.Authenticated(Secured.class)
     public static Result update(String id) {
         String formAction = routes.Courses.update(id).absoluteURL(request());
 
@@ -92,11 +102,12 @@ public class Courses extends Controller {
                 flash("success", Messages.get(course.type.equals(Course.CourseType.COURSE) ? "course.updated" : "lesson.updated"));
                 return redirect(routes.Courses.edit("" + course.id));
             } catch (Exception e) {
-                flash("danger", Messages.get("error.unknown"));
+                flash("danger", e.getMessage());
             }
+        } else {
+            flash("danger", Messages.get("error"));
         }
 
-        flash("danger", Messages.get("error"));
         return ok(views.html.course.edit.render("edit", formAction, form));
     }
 

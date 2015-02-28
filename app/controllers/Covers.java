@@ -11,17 +11,9 @@ import views.html.*;
 public class Covers extends Controller {
 
     public static Result get(String id) {
-        return ok(home.render());
-    }
-
-    //@Security.Authenticated(Secured.class) // TODO: remove after testing;
-    public static Result save() {
-        return ok(home.render());
-    }
-
-    //@Security.Authenticated(Secured.class) // TODO: remove after testing;
-    public static Result delete(String id) {
-        return ok(home.render());
+        Cover cover = Cover.find.byId(id);
+        if (cover == null) return notFound(errors.render(Messages.get("error.page_not_found")));
+        return ok(cover.data).as(cover.contentType);
     }
 
 }

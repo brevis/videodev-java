@@ -1,18 +1,22 @@
+@import services.AuthService
+
 @main() {
 
     @sidebar()
 
     <div class="main">
-        <div class="block filter">
-            <div class="newonly">
-                <a href="" class="btn btn-default btn-xs active"><i class="fa fa-check-square-o"></i> Только новые</a>
+        @if(AuthService.isLogged) {
+            <div class="block filter">
+                <div class="newonly">
+                    <a href="" class="btn btn-default btn-xs active"><i class="fa fa-check-square-o"></i> Только новые</a>
+                </div>
+                <div class="markasread">
+                    <a href="" class="btn btn-default btn-xs">Отметить все как прочитанные</a>
+                </div>
             </div>
-            <div class="markasread">
-                <a href="" class="btn btn-default btn-xs">Отметить все как прочитанные</a>
-            </div>
-        </div>
+        }
         <div class="block new">
-            <span class="label label-success">Java</span> <span class="label course">Курс</span>
+            <span class="label label-success">Java</span> <span class="label label-info">Курс</span>
             <h2><a href="@routes.Courses.view("1")">Lorem isum dolor sit amet</a></h2>
             <div class="description">
                 <p class="cover">

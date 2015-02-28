@@ -1,5 +1,6 @@
 package models;
 
+import com.avaje.ebean.ExpressionList;
 import play.data.validation.Constraints;
 import play.db.*;
 import play.db.ebean.*;
@@ -31,11 +32,12 @@ public class Course extends Model {
     @Column(columnDefinition = "TEXT")
     public String description;
 
-    public Cover cover = null;
-
     @ManyToOne
     @Constraints.Required
     public Member member;
+
+    @OneToOne
+    public Cover cover;
 
     @OneToMany
     public List<Lesson> lessons = new ArrayList<>();
@@ -48,6 +50,26 @@ public class Course extends Model {
         this.title = title;
         this.description = description;
         this.type = type;
+        this.cover = null;
+    }
+
+    /**
+     * Return a page of Course
+     *
+     * @param page Integer
+     * @param category Filter applied on the name column
+     */
+    public static com.avaje.ebean.Page<Course> page(Integer page, Integer pageSize, String category, Member member) {
+        if (page < 1) page = 1; // normalize page (start from 1)
+
+        ExpressionList<Course> expr = find.where();
+        if (!category.equals("")) expr.eq("category.slug", category);
+        if (member != null) expr.eq("member", member);
+        return expr
+                .orderBy("title ASC")
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page-1);
     }
 
 }

@@ -45,7 +45,7 @@ public class AuthService {
             HashMap<String, String> fbData = mapper.readValue(rawData, HashMap.class);
 
             String fbid = fbData.get("id");
-            if (!fbid.matches("\\d+")) return null;
+            if (!fbid.matches("^\\d+$")) return null;
 
             Member member = Member.find.byId(fbid);
             if (member == null) {

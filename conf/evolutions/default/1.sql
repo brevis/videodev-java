@@ -16,6 +16,7 @@ create table course (
   title                     varchar(255),
   description               TEXT,
   member_facebook_id        varchar(255),
+  cover_id                  integer,
   constraint ck_course_type check (type in (0,1)),
   constraint pk_course primary key (id))
 ;
@@ -24,6 +25,8 @@ create table cover (
   id                        integer not null,
   data                      bytea,
   content_type              varchar(255),
+  url                       varchar(255),
+  constraint uq_cover_1 unique (url),
   constraint pk_cover primary key (id))
 ;
 
@@ -81,8 +84,10 @@ alter table course add constraint fk_course_category_1 foreign key (category_slu
 create index ix_course_category_1 on course (category_slug);
 alter table course add constraint fk_course_member_2 foreign key (member_facebook_id) references member (facebook_id);
 create index ix_course_member_2 on course (member_facebook_id);
-alter table lesson add constraint fk_lesson_course_3 foreign key (course_id) references course (id);
-create index ix_lesson_course_3 on lesson (course_id);
+alter table course add constraint fk_course_cover_3 foreign key (cover_id) references cover (id);
+create index ix_course_cover_3 on course (cover_id);
+alter table lesson add constraint fk_lesson_course_4 foreign key (course_id) references course (id);
+create index ix_lesson_course_4 on lesson (course_id);
 
 
 
