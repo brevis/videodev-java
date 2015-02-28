@@ -11,13 +11,18 @@ GET         /editpage/:slug            controllers.Pages.edit(slug)
 POST        /editpage/:slug            controllers.Pages.update(slug)
 
 # Lessons
-GET         /lessons/my                controllers.Lessons.my()
-GET         /lessons/add               controllers.Lessons.add()
-POST        /lessons/add               controllers.Lessons.save()
-GET         /lessons/:id/edit          controllers.Lessons.edit(id)
-POST        /lessons/:id/edit          controllers.Lessons.update(id)
-GET         /lessons/:id/delete        controllers.Lessons.delete(id)
-GET         /lessons/:id               controllers.Lessons.view(id)
+GET         /courses/my                controllers.Courses.my()
+GET         /courses/add               controllers.Courses.add()
+POST        /courses/add               controllers.Courses.save()
+GET         /courses/:id/edit          controllers.Courses.edit(id)
+POST        /courses/:id/edit          controllers.Courses.update(id)
+GET         /courses/:id/delete        controllers.Courses.delete(id)
+GET         /courses/:id               controllers.Courses.view(id)
+
+# Cover
+GET         /cover/:id                 controllers.Covers.get(id)
+POST        /cover                     controllers.Covers.save()
+GET         /cover/:id/delete          controllers.Covers.delete(id)
 
 # Authorization
 GET         /login                     controllers.Auth.login()

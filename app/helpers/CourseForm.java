@@ -2,6 +2,9 @@ package helpers;
 
 import models.Category;
 import models.Course;
+import models.Cover;
+import models.Lesson;
+import play.i18n.Messages;
 import services.CourseService;
 
 import java.util.ArrayList;
@@ -15,8 +18,8 @@ public class CourseForm {
 
     private Course.CourseType courseType;
 
-    private static final String[] courseFields = {"category", "title", "description", "cover"};
-    private static final String[] lessonFields = {"title", "playerCode"};
+    private static final String[] courseFields = {"category", "title", "description", "coverId", "coverUrl"};
+    private static final String[] lessonFields = {"lessonTitle", "playerCode"};
 
     private HashMap<String, String> courseValues = new HashMap<>();
     private ArrayList<HashMap<String, String>> lessonsValues = new ArrayList<>();
@@ -68,6 +71,35 @@ public class CourseForm {
             }
         }
 
+        if (courseType.equals(Course.CourseType.LESSON)) {
+            form.addLessonValue(0, "lessonTitle", form.getValue("title"));
+        }
+
+        return form;
+    }
+
+    /**
+     * Build CourseForm based on Course object
+     *
+     * @param course Course
+     * @return CourseForm
+     */
+    public static CourseForm getFormFromCourse(Course course) {
+        CourseForm form = new CourseForm(course.type);
+        form.addValue("category", course.category.slug);
+        form.addValue("title", course.title);
+        form.addValue("description", course.description);
+        Cover cover = course.cover;
+        form.addValue("coverId", cover == null ? "" : course.cover.id.toString());
+        form.addValue("coverUrl", "");
+
+        int i = 0;
+        for(Lesson lesson : course.lessons) {
+            form.addLessonValue(i, "lessonTitle", lesson.title);
+            form.addLessonValue(i, "playerCode", lesson.playerCode);
+            i++;
+        }
+
         return form;
     }
 
@@ -97,12 +129,14 @@ public class CourseForm {
      * @param value String
      */
     public void addLessonValue(Integer lessonNumber, String key, String value) {
-        HashMap<String, String> lesson;
+        HashMap<String, String> lesson = new HashMap<>();
         try{
             lesson = lessonsValues.get(lessonNumber);
         } catch (Exception e) {
-            lesson = new HashMap<String, String>();
-            lessonsValues.add(lessonNumber, lesson);
+            for(int i=lessonsValues.size(); i<lessonNumber+1; i++) {
+                lesson = new HashMap<>();
+                lessonsValues.add(i, lesson);
+            }
         }
         lesson.put(key, value);
     }
@@ -115,7 +149,7 @@ public class CourseForm {
      */
     public String getValue(String key) {
         try {
-            return courseValues.get(key);
+            return courseValues.get(key) != null ? courseValues.get(key) : "";
         } catch (Exception e) {
             return "";
         }
@@ -132,7 +166,7 @@ public class CourseForm {
         HashMap<String, String> lesson;
         try{
             lesson = lessonsValues.get(lessonNumber);
-            return lesson.get(key);
+            return lesson.get(key) != null ? lesson.get(key) : "";
         } catch (Exception e) {
             return "";
         }
@@ -144,7 +178,9 @@ public class CourseForm {
      * @return Integer
      */
     public Integer getLessonsCount() {
-        return lessonsValues.size();
+        Integer count = courseType == Course.CourseType.LESSON ? 1 : lessonsValues.size();
+        if (count < 1) count = 1;
+        return count;
     }
 
     public boolean isValid() {
@@ -163,22 +199,32 @@ public class CourseForm {
         description = description.trim();
         if (description.equals("")) this.addError("description", "required");
 
-        String cover = this.getValue("cover");
-        System.out.println("!!! CHECK COVER FILE !!!"); // TODO: check file exists;
+        String coverId = "";
+        Cover cover = CourseService.saveCover(this.getValue("coverUrl"));
+        if (cover != null) {
+            coverId = cover.id.toString();
+        } else {
+            try {
+                cover = Cover.find.byId(this.getValue("coverId"));
+            } catch (Exception e) {
+                cover = null;
+            }
+            if (cover != null) coverId = cover.id.toString();
+        }
+        this.addValue("coverId", coverId);
 
         // Lessons data
-        Integer lessonsCount = courseType == Course.CourseType.COURSE ? 1 : lessonsValues.size();
-        for(int i = 0; i<lessonsCount; i++) {
-            String lessonTitle = this.getLessonValue(i, "title");
+        for(int i = 0; i<getLessonsCount(); i++) {
+            String lessonTitle = this.getLessonValue(i, "lessonTitle");
             lessonTitle = lessonTitle.trim();
-            if (lessonTitle.equals("")) this.addLessonError(i, "title", "required");
+            if (lessonTitle.equals("")) this.addLessonError(i, "lessonTitle", "required");
 
             String playerCode = this.getLessonValue(i, "playerCode");
             playerCode = playerCode.trim();
             if (playerCode.equals("")) {
                 this.addLessonError(i, "playerCode", "required");
             } else {
-                String extractedPlayerCode = CourseService.extractPlayerCode(playerCode);
+                String extractedPlayerCode = CourseService.normalizePlayerCode(playerCode);
                 if (extractedPlayerCode.equals("")) {
                     this.addLessonError(i, "playerCode", "incorrect");
                 } else {
@@ -209,12 +255,14 @@ public class CourseForm {
      * @param value String
      */
     public void addLessonError(Integer lessonNumber, String key, String value) {
-        HashMap<String, String> lesson;
+        HashMap<String, String> lesson = new HashMap<>();
         try{
             lesson = lessonsErrors.get(lessonNumber);
         } catch (Exception e) {
-            lesson = new HashMap<String, String>();
-            lessonsErrors.add(lessonNumber, lesson);
+            for(int i=lessonsErrors.size(); i<lessonNumber+1; i++) {
+                lesson = new HashMap<>();
+                lessonsErrors.add(i, lesson);
+            }
         }
         lesson.put(key, value);
     }
@@ -241,7 +289,8 @@ public class CourseForm {
      */
     public String getError(String key) {
         try {
-            return courseErrors.get(key);
+            String error = courseErrors.get(key);
+            return error != null ? Messages.get("error.form." + error) : "";
         } catch (Exception e) {
             return "";
         }
@@ -275,7 +324,8 @@ public class CourseForm {
         HashMap<String, String> lesson;
         try{
             lesson = lessonsErrors.get(lessonNumber);
-            return lesson.get(key);
+            String error = lesson.get(key);
+            return error != null ? Messages.get("error.form." + error) : "";
         } catch (Exception e) {
             return "";
         }

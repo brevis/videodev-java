@@ -1,0 +1,23 @@
+@defining(flash.get("success")) { m =>
+    @if(m != null) {
+        <div class="alert alert-success" role="alert">@m</div>
+    }
+}
+
+@defining(flash.get("info")) { m =>
+    @if(m != null) {
+        <div class="alert alert-info" role="alert">@m</div>
+    }
+}
+
+@defining(flash.get("warning")) { m =>
+    @if(m != null) {
+        <div class="alert alert-warning" role="alert">@m</div>
+    }
+}
+
+@defining(flash.get("danger")) { m =>
+    @if(m != null) {
+        <div class="alert alert-danger" role="alert">@m</div>
+    }
+}

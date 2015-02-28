@@ -258,11 +258,10 @@ form.add .accordion-heading{
     height: 38px;
 }
 
-form.add .accordion-heading a.delete,
-form.add .accordion-heading button.delete{
+form.add .accordion-heading a.deletelesson,
+form.add .accordion-heading button.deletelesson{
     margin: 8px 8px 0 0;
 }
-
 
 /** accordion */
 .accordion {

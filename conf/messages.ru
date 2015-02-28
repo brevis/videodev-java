@@ -1,0 +1,12 @@
+error=Ошибка
+error.unknown=Что-то пошло не так :(
+error.page_not_found=Запрашиваетмая Вами страница не найдена
+error.access_denied=Отказано в доступе
+error.form.required=Обязательное поле
+error.form.incorrect=Неверный формат
+course.saved=Курс добавлен
+lesson.saved=Урок добавлен
+course.updated=Курс обновлен
+lesson.updated=Урок обновлен
+course.deleted=Курс удален
+lesson.deleted=Урок удален

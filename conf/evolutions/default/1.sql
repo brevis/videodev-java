@@ -15,10 +15,16 @@ create table course (
   category_slug             varchar(255),
   title                     varchar(255),
   description               TEXT,
-  cover                     varchar(255),
   member_facebook_id        varchar(255),
   constraint ck_course_type check (type in (0,1)),
   constraint pk_course primary key (id))
+;
+
+create table cover (
+  id                        integer not null,
+  data                      bytea,
+  content_type              varchar(255),
+  constraint pk_cover primary key (id))
 ;
 
 create table lesson (
@@ -63,6 +69,8 @@ create sequence category_seq;
 
 create sequence course_seq;
 
+create sequence cover_seq;
+
 create sequence lesson_seq;
 
 create sequence member_seq;
@@ -92,6 +100,8 @@ drop table if exists category cascade;
 
 drop table if exists course cascade;
 
+drop table if exists cover cascade;
+
 drop table if exists lesson cascade;
 
 drop table if exists lesson_member cascade;
@@ -105,6 +115,8 @@ drop table if exists page cascade;
 drop sequence if exists category_seq;
 
 drop sequence if exists course_seq;
+
+drop sequence if exists cover_seq;
 
 drop sequence if exists lesson_seq;
 

@@ -1,0 +1,181 @@
+@import models.Course.CourseType
+
+@(action : String)(formAction: String)(form: helpers.CourseForm)
+
+@main(if(action.equals("add")){"Добавить контент"}else{"Редактировать контент"}) {
+
+    @sidebar()
+
+    <div class="main">
+
+        @flashmessage()
+
+        <div class="block">
+            <h2>@if(action.equals("add")){Добавить}else{Редактировать} контент</h2>
+            <form action="@formAction" class="add" method="post">
+                <input type="hidden" name="contentType" value="@if(form.getType.equals(CourseType.LESSON)){lesson}else{course}" id="contentType">
+                <input type="hidden" name="lessonsCount" value="@form.getLessonsCount" id="lessonsCount">
+
+                <div role="tabpanel">
+
+                    <ul class="nav nav-tabs" role="tablist" style="height: 44px;">
+                        <li role="presentation" class="@if(form.getType.equals(CourseType.LESSON)){active}@if(action.equals("edit")){ disabled}"><a @if(action.equals("add")){href="#tablesson" aria-controls="tablesson" role="tab" data-toggle="tab"}>Урок</a></li>
+                        <li role="presentation" class="@if(form.getType.equals(CourseType.COURSE)){active}@if(action.equals("edit")){ disabled}"><a @if(action.equals("add")){href="#tabcourse" aria-controls="tabcourse" role="tab" data-toggle="tab"}>Курс</a></li>
+                    </ul>
+
+
+                    <div class="tab-content">
+
+                        <!-- Lesson tab -->
+                        <div role="tabpanel" class="tab-pane@if(form.getType.equals(CourseType.LESSON)){ active}" id="tablesson">
+                            <div class="form-group@if(form.hasError("category")){ has-error}">
+                                <select name="lesson[category]" class="form-control" required="required">
+                                    <option value="">Категория*</option>
+                                    <option disabled>-------------</option>
+                                    @for(c <- Category.getActiveCategories) {
+                                        <option value="@c.slug"@if(c.slug.equals(form.getValue("category"))){ selected="selected"}>@c.name</option>
+                                    }
+                                </select>
+                                <p class="help-block">@form.getError("category")</p>
+                            </div>
+                            <div class="form-group@if(form.hasError("title")){ has-error}">
+                                <input type="text" name="lesson[title]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getValue("title")">
+                                <p class="help-block">@form.getError("title")</p>
+                            </div>
+                            <div class="form-group@if(form.hasError("description")){ has-error}">
+                                <textarea  name="lesson[description]" class="form-control" required="required" rows="10" placeholder="Описание урока*">@form.getValue("description")</textarea>
+                                <p class="help-block">@form.getError("description")</p>
+                            </div>
+                            <div class="form-group@if(form.hasError("cover")){ has-error}">
+                                <input type="hidden" name="lesson[coverId]" id="lessonCoverId" value="@form.getValue("coverId")">
+                                <input type="text" name="lesson[coverUrl]" class="coverinput form-control" id="lessonCoverUrl" placeholder="URL изображения" value="">
+                                <div>
+                                    <div class="left">
+                                        <img id="lessonCoverImage" src="@if(!form.getValue("coverId").equals("")){@routes.Covers.get(form.getValue("coverId"))}" alt=""@if(form.getValue("coverId").equals("")){ style="display: none;}>
+                                    </div>
+                                    <div class="left">
+                                        @if(!form.getValue("coverId").equals("")) {
+                                            <button type="button" class="deletecover btn btn-danger btn-xs" data-type="lesson"><i class="fa fa-trash-o"></i></button>
+                                        }
+                                    </div>
+                                </div>
+
+                                <p class="help-block">@form.getError("cover")</p>
+                            </div>
+                            <div class="form-group@if(form.hasLessonError(0, "playerCode")){ has-error}">
+                                <textarea  name="lesson[playerCode]" class="form-control" required="required" rows="4" placeholder="Код YouTube-плеера*">@form.getLessonValue(0, "playerCode")</textarea>
+                                <p class="help-block">@form.getLessonError(0, "playerCode")</p>
+                            </div>
+                        </div>
+
+                        <!-- Course tab -->
+                        <div role="tabpanel" class="tab-pane@if(form.getType.equals(CourseType.COURSE)){ active}" id="tabcourse">
+
+                            <div class="accordion" id="accordioncourse">
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordioncourse" href="#">Детали курса</a>
+                                    </div>
+                                    <div id="description" class="accordion-body collapse in">
+                                        <div class="form-group@if(form.hasError("category")){ has-error}">
+                                            <select name="course[category]" class="form-control" required="required">
+                                                <option value="">Категория*</option>
+                                                <option disabled>-------------</option>
+                                                @for(c <- Category.getActiveCategories) {
+                                                    <option value="@c.slug"@if(c.slug.equals(form.getValue("category"))){ selected="selected"}>@c.name</option>
+                                                }
+                                            </select>
+                                            <p class="help-block">@form.getError("category")</p>
+                                        </div>
+                                        <div class="form-group@if(form.hasError("title")){ has-error}">
+                                            <input type="text" name="course[title]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getValue("title")">
+                                            <p class="help-block">@form.getError("title")</p>
+                                        </div>
+                                        <div class="form-group@if(form.hasError("description")){ has-error}">
+                                            <textarea  name="course[description]" class="form-control" required="required" rows="10" placeholder="Описание урока*">@form.getValue("description")</textarea>
+                                            <p class="help-block">@form.getError("description")</p>
+                                        </div>
+                                        <div class="form-group@if(form.hasError("cover")){ has-error}">
+                                            <input type="hidden" name="course[coverId]" id="courseCoverId" value="@form.getValue("coverId")">
+                                            <input type="text" name="course[coverUrl]" class="coverinput form-control" id="courseCoverUrl" placeholder="URL изображения" value="">
+                                            <div>
+                                                <div class="left">
+                                                    <img id="courseCoverImage" src="@if(!form.getValue("coverId").equals("")){@routes.Covers.get(form.getValue("coverId"))}" alt=""@if(form.getValue("coverId").equals("")){ style="display: none;}>
+                                                </div>
+                                                <div class="left">
+                                                @if(!form.getValue("coverId").equals("")) {
+                                                    <button type="button" class="deletecover btn btn-danger btn-xs" data-type="course"><i class="fa fa-trash-o"></i></button>
+                                                }
+                                                </div>
+                                            </div>
+
+                                            <p class="help-block">@form.getError("cover")</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @for(i <- 0 to form.getLessonsCount-1) {
+                                    <div id="lessongroup@i" class="lessongroup accordion-group">
+                                        <div class="accordion-heading">
+                                            <div class="clear">
+                                                <a class="left accordion-toggle" data-toggle="collapse" data-parent="#accordioncourse" href="#">Урок @(i+1)</a>
+                                                @if(i>0) {
+                                                    <a class="right deletelesson btn btn-danger btn-xs" data-lesson="@i"><i class="fa fa-trash-o"></i></a>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="accordion-body collapse in">
+                                            <div class="form-group@if(form.hasLessonError(i, "lessonTitle")){ has-error}">
+                                                <input type="text" name="course[lessonTitle]" class="form-control" required="required" placeholder="Заголовок*" value="@form.getLessonValue(i, "lessonTitle")">
+                                                <p class="help-block">@form.getLessonError(i, "lessonTitle")</p>
+                                            </div>
+                                            <div class="form-group@if(form.hasLessonError(i, "playerCode")){ has-error}">
+                                                <textarea name="course[playerCode]" class="form-control" required="required" rows="4" placeholder="Код YouTube-плеера*">@form.getLessonValue(i, "playerCode")</textarea>
+                                                <p class="help-block">@form.getLessonError(i, "playerCode")</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+
+                            <button type="button" class="btn btn-default addlesson">
+                                <i class="fa fa-plus"></i> Добавить урок
+                            </button>
+                            <br><br>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-success">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var activeTab = @if(form.getType.equals(CourseType.LESSON)){'lesson'}else{'course'};
+        var lessonsCount = @form.getLessonsCount;
+        var lessonTemplate =
+        '<div id="lessongroup%i%" class="lessongroup accordion-group">' +
+            '<div class="accordion-heading">' +
+                '<div class="clear">' +
+                    '<a class="left accordion-toggle" data-toggle="collapse" data-parent="#accordioncourse" href="#">Урок %n%</a>' +
+                    '<a class="right deletelesson btn btn-danger btn-xs" data-lesson="%i%"><i class="fa fa-trash-o"></i></a>' +
+                '</div>' +
+            '</div>' +
+            '<div class="accordion-body collapse in">' +
+                '<div class="form-group">' +
+                    '<input type="text" name="course[lessonTitle]" class="form-control" required="required" placeholder="Заголовок*" value="">' +
+                    '<p class="help-block"></p>' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<textarea name="course[playerCode]" class="form-control" required="required" rows="4" placeholder="Код YouTube-плеера*"></textarea>' +
+                    '<p class="help-block"></p>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    </script>
+
+}

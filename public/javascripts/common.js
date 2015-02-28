@@ -11,6 +11,47 @@ function checkFBLoginState() {
 
 $(function(){
 
+    // edit course
+    function switchTab(tab) {
+        if (tab == 'course') {
+            $('#contentType' ).val('course');
+            $('#tablesson input, #tablesson select, #tablesson textarea').removeAttr("required");
+            $('#tabcourse input, #tabcourse select, #tabcourse textarea' ).not('.coverinput').attr("required", "required");
+        } else {
+            $('#contentType' ).val('lesson');
+            $('#tablesson input, #tablesson select, #tablesson textarea').not('.coverinput').attr("required", "required");
+            $('#tabcourse input, #tabcourse select, #tabcourse textarea').removeAttr("required");
+        }
+    }
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        if (e.target.hash == '#tabcourse') {
+            switchTab('course');
+        } else {
+            switchTab('lesson');
+        }
+    });
+    switchTab(activeTab);
+
+    $(document.body).on('click', '.deletelesson' ,function() {
+        if (lessonsCount < 2) return;
+        var $el = $(this).parents('.lessongroup');
+        $el.fadeOut();
+        setTimeout(function() {
+            $el.remove();
+            $('#lessonsCount').val(--lessonsCount);
+            var i = 1;
+            $('.lessongroup .accordion-heading a.accordion-toggle').each(function() {
+                $(this).text('Урок ' + (i++));
+            });
+        }, 500);
+    });
+
+    $('.deletecover').on('click', function() {
+        var type = $(this).data('type');
+        $('#' + type + 'CoverId').val('');
+        $('#' + type + 'CoverImage' ).hide();
+        $(this).hide();
+    });
 
 
     // fixed sidebar

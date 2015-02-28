@@ -31,8 +31,7 @@ public class Course extends Model {
     @Column(columnDefinition = "TEXT")
     public String description;
 
-    @Constraints.Required
-    public String cover;
+    public Cover cover = null;
 
     @ManyToOne
     @Constraints.Required
@@ -43,12 +42,11 @@ public class Course extends Model {
 
     public static Model.Finder<String, Course> find = new Model.Finder<>(String.class, Course.class);
 
-    public Course(Member member, Category category, String title, String description, String cover, CourseType type) {
+    public Course(Member member, Category category, String title, String description, CourseType type) {
         this.member = member;
         this.category = category;
         this.title = title;
         this.description = description;
-        this.cover = cover;
         this.type = type;
     }
 
