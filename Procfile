@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/videodev-java -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.url=${DATABASE_URL} -Dconfig.file=conf/prod.conf -Dfacebook.appid=${FACEBOOK_APPID} -Dfacebook.adminFacebookIds=${FACEBOOK_ADMIN_IDS}
+web: target/universal/stage/bin/videodev-java -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.url=${DATABASE_URL}
