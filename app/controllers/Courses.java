@@ -2,7 +2,6 @@ package controllers;
 
 import com.avaje.ebean.PagingList;
 import helpers.CourseForm;
-import javafx.scene.control.Pagination;
 import models.*;
 import play.i18n.Messages;
 import play.mvc.*;
