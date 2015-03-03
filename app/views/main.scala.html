@@ -1,4 +1,4 @@
-@(title: String = "Видеоуроки по программированию")(content: Html)
+@(title: String)(content: Html)
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,7 +43,7 @@
                     <div class="nav">
                         <ul>
                             <li><i class="fa fa-user"></i> @(services.AuthService.getUserName)</li>
-                            <li><a href="@routes.Application.home()">Лента</a> <span class="label">@(services.AuthService.getUnreadCount)</span></li>
+                            <li><a href="@routes.Application.home()">Лента</a> <span class="label unreadcount">@(services.AuthService.getUnreadCount)</span></li>
                             <li><a href="@routes.Auth.logout()">Выход</a></li>
                         </ul>
                     </div>

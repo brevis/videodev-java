@@ -11,11 +11,53 @@ import services.CourseService;
 import views.html.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Courses extends Controller {
 
-    public static Result view(String id) {
-        return ok(views.html.course.view.render());
+    public static Result view(String id, Integer l) {
+        Course course = Course.find.byId(id);
+        if (course==null) return notFound(errors.render(Messages.get("error.page_not_found")));
+
+        // update viewCount
+        course.updateViewsCount();
+
+        // get first unread lesson number
+        if (AuthService.isLogged() && request().queryString().containsKey("new")) {
+            l = course.getFirstUnreadLessonNumber();
+            return redirect(routes.Courses.view(id, l) + "#lesson" + l);
+        }
+
+        // add course to member's view history
+        if (AuthService.isLogged()) {
+            AuthService.getCurrentMember().addViewHistory(course);
+        }
+
+        // check lesson number and add lesson to member's view history
+        if (l < 1 || l > course.lessons().size()) {
+            l = 0;
+        }
+
+        return ok(views.html.course.view.render(course, l));
+    }
+
+    public static Result list(String slug, Integer page) {
+        String siteTitle = Messages.get("default.siteTitle");
+        Category category = null;
+        if (slug != null) {
+            try {
+                category = Category.find.byId(slug);
+            } catch (Exception e) {
+                category = null;
+            }
+            if (category == null) return notFound(errors.render(Messages.get("error.page_not_found")));
+        }
+        if (category != null) {
+            siteTitle = category.name;
+        }
+        return ok(
+                views.html.course.list.render(Course.page(page, 10, slug, null), slug, siteTitle)
+        );
     }
 
     @Security.Authenticated(Secured.class)
@@ -74,7 +116,7 @@ public class Courses extends Controller {
             return notFound(errors.render(Messages.get("error.page_not_found")));
         }
 
-        if (!AuthService.isLoggedAsAdmin() && course.member.equals(AuthService.getCurrentMember())) {
+        if (!course.member.equals(AuthService.getCurrentMember()) && !AuthService.isLoggedAsAdmin() ) {
             return badRequest(errors.render(Messages.get("error.access_denied")));
         }
 
@@ -91,7 +133,7 @@ public class Courses extends Controller {
             return notFound(errors.render(Messages.get("error.page_not_found")));
         }
 
-        if (!AuthService.isLoggedAsAdmin() && course.member.equals(AuthService.getCurrentMember())) {
+        if (!course.member.equals(AuthService.getCurrentMember()) && !AuthService.isLoggedAsAdmin() ) {
             return badRequest(errors.render(Messages.get("error.access_denied")));
         }
 
@@ -112,8 +154,38 @@ public class Courses extends Controller {
     }
 
     @Security.Authenticated(Secured.class)
-    public static Result delete(String id) {
-        return ok(home.render());
+    public static Result deleteone(String id) {
+        return deleteCourses(new String[]{id});
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result delete() {
+        String[] ids;
+        try{
+            ids = request().body().asFormUrlEncoded().get("id");
+        } catch (Exception e) {
+            ids = null;
+        }
+        return deleteCourses(ids);
+    }
+
+    /*--------------------------------------------------------------------------------*/
+
+    private static Result deleteCourses(String[] ids) {
+        if (CourseService.deleteCourses(ids)) {
+            flash("success", Messages.get("course.deleted"));
+        } else {
+            flash("danger", Messages.get("error.unknown"));
+        }
+
+        String cslug;
+        try {
+            cslug = request().getQueryString("cslug");
+        } catch (Exception e) {
+            cslug = "";
+        }
+
+        return redirect(routes.Courses.my(cslug, 0));
     }
 
 }

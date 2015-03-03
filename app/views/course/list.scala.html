@@ -1,0 +1,81 @@
+@(currentPage: com.avaje.ebean.Page[Course])(slug: String)(siteTitle: String)
+
+@main(siteTitle) {
+
+    @sidebar()
+
+    <div class="main">
+
+        @flashmessage()
+
+        @*
+        @if(services.AuthService.isLogged) {
+            <div class="block filter">
+                <div class="newonly">
+                    <a href="" class="btn btn-default btn-xs active"><i class="fa fa-check-square-o"></i> Только новые</a>
+                </div>
+                <div class="markasread">
+                    <a href="" class="btn btn-default btn-xs">Отметить все как прочитанные</a>
+                </div>
+            </div>
+        }
+        *@
+
+        @if(currentPage.getTotalRowCount == 0) {
+            <div class="block">
+                <p>
+                    <em>Пусто :(</em>
+                </p>
+            </div>
+        } else {
+            @for(course <- currentPage.getList) {
+                <div class="block@if(course.hasUnreadLessons){ new}">
+                    <span class="label label-success">@course.category.name</span>
+                    @if(course.`type`.equals(Course.CourseType.COURSE)){<span class="label label-info">Курс</span>}
+                    <h2><a href="@routes.Courses.view(course.id.toString)@if(course.hasUnreadLessons){?new}">@course.title</a></h2>
+                    <div class="description">
+                        @if(course.cover!=null) {
+                            <p class="cover">
+                                <img src="@routes.Covers.get(course.cover.id.toString)" alt="@course.title">
+                            </p>
+                        }
+                        <div>@course.description</div>
+                    </div>
+
+                    <div class="meta">
+                        <div class="date">
+                            <i class="fa fa-calendar"></i> @course.updateDate.format("d MMMM, yyyy")
+                        </div>
+                        <div class="views">
+                            <i class="fa fa-eye"></i> @course.viewsCount
+                        </div>
+                        <div class="author">
+                            <i class="fa fa-user"></i> @course.member.getName
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if(currentPage.getTotalPageCount > 1) {
+                <ul class="pagination">
+                    @if(currentPage.hasPrev) {
+                        <li class="next">
+                            <a href="@routes.Courses.list(slug, currentPage.getPageIndex)">&larr;</a>
+                        </li>
+                    }
+                    @for(p <- 1 to currentPage.getTotalPageCount) {
+                        <li@if(currentPage.getPageIndex + 1 == p){ class="active"}>
+                            <a href="@routes.Courses.list(slug, p)">@p</a>
+                        </li>
+                    }
+                    @if(currentPage.hasNext) {
+                        <li class="next">
+                            <a href="@routes.Courses.list(slug, currentPage.getPageIndex + 2)">&rarr;</a>
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+
+}

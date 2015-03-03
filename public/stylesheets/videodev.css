@@ -118,10 +118,6 @@ header .login .zocial.facebook:hover{
     text-decoration: none;
 }
 
-header .nav span.label{
-    background-color: #d9534f;
-}
-
 section.main{
     margin: 20px 0;
 }
@@ -207,7 +203,7 @@ section.main .main .block p.cover img{
 }
 
 section.main .main .block h2{
-    margin-top: 0;
+    margin-top: 5px;
 }
 
 section.main .main .block h2 a,
@@ -226,9 +222,15 @@ section.main .main .block .label.course{
 section.main .main .block .meta{
     margin-top: 20px;
     font-size: 10pt;
-    color: #c1c0c0;    
+    color: #c1c0c0;
+    height: 10px;
 }
 
+section.main .main .block .meta div{
+    margin-right: 20px;
+    float: left;
+    height: 10px;
+}
 section.main .main .block .meta:after{
     clear: both;
     display: block;
@@ -237,10 +239,6 @@ section.main .main .block .meta:after{
     content: "";
 }
 
-section.main .main .block .meta div{
-    margin-right: 20px;
-    float: left;
-}
 
 form.add .form-group{
     margin-bottom: 20px;
@@ -487,3 +485,4 @@ span.copyleft{
 .breakall {
     word-break: break-all;
 }
+

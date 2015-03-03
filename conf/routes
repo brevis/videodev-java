@@ -2,22 +2,25 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home staticpage
+# home
 GET         /                          controllers.Application.home()
+
+# Courses
+GET         /courses/my                controllers.Courses.my(cslug:String ?= "", page:Integer ?= 0)
+POST        /courses/delete            controllers.Courses.delete()
+GET         /courses/add               controllers.Courses.add()
+POST        /courses/add               controllers.Courses.save()
+GET         /courses/:id/edit          controllers.Courses.edit(id)
+POST        /courses/:id/edit          controllers.Courses.update(id)
+GET         /courses/:id/delete        controllers.Courses.deleteone(id)
+GET         /courses/:id               controllers.Courses.view(id, l:Integer ?= 0)
+
 
 # About staticpage
 GET         /:slug.html                controllers.Pages.page(slug)
 GET         /editpage/:slug            controllers.Pages.edit(slug)
 POST        /editpage/:slug            controllers.Pages.update(slug)
 
-# Lessons
-GET         /courses/my                controllers.Courses.my(cslug:String ?= "", page:Integer ?= 0)
-GET         /courses/add               controllers.Courses.add()
-POST        /courses/add               controllers.Courses.save()
-GET         /courses/:id/edit          controllers.Courses.edit(id)
-POST        /courses/:id/edit          controllers.Courses.update(id)
-GET         /courses/:id/delete        controllers.Courses.delete(id)
-GET         /courses/:id               controllers.Courses.view(id)
 
 # Cover
 GET         /cover/:id                 controllers.Covers.get(id)
@@ -30,4 +33,4 @@ GET         /logout                    controllers.Auth.logout()
 GET         /assets/*file              controllers.Assets.at(path="/public", file)
 
 # Categories
-GET         /:slug                     controllers.Application.category(slug)
+GET         /:slug                     controllers.Courses.list(slug, page:Integer ?= 0)

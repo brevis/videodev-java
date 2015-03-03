@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import models.Course;
 import models.Member;
 import play.api.Play;
 import play.api.libs.json.JsValue;
@@ -15,6 +16,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,7 +65,7 @@ public class AuthService {
 
     public static void createAuth(Member member) {
         member.lastLoginDate = new Date();
-        member.save();
+        member.update();
         Http.Context.current().session().clear();
         String uuid = java.util.UUID.randomUUID().toString();
         Cache.set("member:" + uuid, member);
@@ -108,8 +112,41 @@ public class AuthService {
         return member.firstName + " " + member.lastName;
     }
 
-    public static int getUnreadCount() {
-        return 4;
+    public static String getUnreadCount() {
+        // TODO: refactor;
+
+        Member member = getCurrentMember();
+        if (member == null) return "";
+
+        int count = -1;
+
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = play.db.DB.getConnection();
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select count(*) from member_course where member_facebook_id = '" + member.facebookId + "'");
+            if (rs.next()) count = rs.getInt(1);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            conn = null;
+            stmt = null;
+            count = -1;
+        } finally {
+            try {
+                conn.close();
+                stmt.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if (count >= 0 ) {
+            count = Course.find.all().size() - count;
+            return count != 0 ? "" + count : "";
+        } else {
+            return "";
+        }
     }
 
     /*-------------------------------------------------------------------------*/

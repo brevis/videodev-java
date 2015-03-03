@@ -16,7 +16,7 @@ public class ApplicationTest extends WithApplication {
 
     @Test
     public void renderTemplate() {
-        Content html = views.html.home.render();
+        Content html = views.html.course.list.render(null, "", null);
         assertThat(contentType(html)).isEqualTo("text/html");
         assertThat(contentAsString(html)).contains("Videodev");
     }

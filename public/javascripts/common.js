@@ -30,7 +30,9 @@ $(function(){
             switchTab('lesson');
         }
     });
-    switchTab(activeTab);
+    try {
+        switchTab(activeTab);
+    } catch(e) {}
 
     $('.addlesson').on('click', function() {
         var html = lessonTemplate.replace(/%i%/g, lessonsCount).replace(/%n%/g, lessonsCount + 1);
@@ -60,6 +62,29 @@ $(function(){
         $('#' + type + 'CoverUrl' ).removeAttr("disabled");
         $(this).hide();
     });
+
+    // group items /courses/my
+    $('form.groupitems input[type="checkbox"]').on('change', function() {
+        var countInput = $('form.groupitems input.item').length;
+        var countInputChecked = $('form.groupitems input.item:checked').length;
+        if ($(this).hasClass('selectall')) {
+            $('form.groupitems input.item').prop('checked', $(this).prop('checked'));
+        } else {
+            $('form.groupitems input.selectall').prop('checked', countInput == countInputChecked);
+        }
+
+        if ($('form.groupitems input.item:checked').length > 0) {
+            $('button.groupaction').removeAttr('disabled');
+        } else {
+            $('button.groupaction').attr('disabled', 'disabled');
+        }
+
+    });
+
+    // unreadCount
+    if ($('.label.unreadcount').text() != '') {
+        $('.label.unreadcount').addClass('label-danger');
+    }
 
 
     // fixed sidebar

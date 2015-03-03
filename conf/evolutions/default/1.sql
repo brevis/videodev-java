@@ -1,5 +1,4 @@
 # --- Created by Ebean DDL
-# To stop Ebean DDL generation, remove this comment and start using Evolutions
 
 # --- !Ups
 
@@ -17,6 +16,8 @@ create table course (
   description               TEXT,
   member_facebook_id        varchar(255),
   cover_id                  integer,
+  update_date               timestamp,
+  views_count               integer,
   constraint ck_course_type check (type in (0,1)),
   constraint pk_course primary key (id))
 ;
@@ -57,16 +58,16 @@ create table page (
 ;
 
 
-create table lesson_member (
-  lesson_id                      integer not null,
-  member_facebook_id             varchar(255) not null,
-  constraint pk_lesson_member primary key (lesson_id, member_facebook_id))
-;
-
 create table member_lesson (
   member_facebook_id             varchar(255) not null,
   lesson_id                      integer not null,
   constraint pk_member_lesson primary key (member_facebook_id, lesson_id))
+;
+
+create table member_course (
+  member_facebook_id             varchar(255) not null,
+  course_id                      integer not null,
+  constraint pk_member_course primary key (member_facebook_id, course_id))
 ;
 create sequence category_seq;
 
@@ -91,13 +92,13 @@ create index ix_lesson_course_4 on lesson (course_id);
 
 
 
-alter table lesson_member add constraint fk_lesson_member_lesson_01 foreign key (lesson_id) references lesson (id);
-
-alter table lesson_member add constraint fk_lesson_member_member_02 foreign key (member_facebook_id) references member (facebook_id);
-
 alter table member_lesson add constraint fk_member_lesson_member_01 foreign key (member_facebook_id) references member (facebook_id);
 
 alter table member_lesson add constraint fk_member_lesson_lesson_02 foreign key (lesson_id) references lesson (id);
+
+alter table member_course add constraint fk_member_course_member_01 foreign key (member_facebook_id) references member (facebook_id);
+
+alter table member_course add constraint fk_member_course_course_02 foreign key (course_id) references course (id);
 
 # --- !Downs
 
@@ -109,11 +110,11 @@ drop table if exists cover cascade;
 
 drop table if exists lesson cascade;
 
-drop table if exists lesson_member cascade;
-
 drop table if exists member cascade;
 
 drop table if exists member_lesson cascade;
+
+drop table if exists member_course cascade;
 
 drop table if exists page cascade;
 

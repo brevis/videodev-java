@@ -1,3 +1,5 @@
+default.siteTitle=Видеоуроки по программированию
+
 error=Ошибка
 error.unknown=Что-то пошло не так :(
 error.page_not_found=Запрашиваемая Вами страница не найдена
@@ -10,4 +12,4 @@ lesson.saved=Урок добавлен
 course.updated=Курс обновлен
 lesson.updated=Урок обновлен
 course.deleted=Курс удален
-lesson.deleted=Урок удален
+courses.deleted=Курсы удалены

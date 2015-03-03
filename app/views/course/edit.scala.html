@@ -32,7 +32,7 @@
                                 <select name="lesson[category]" class="form-control" required="required">
                                     <option value="">Категория*</option>
                                     <option disabled>-------------</option>
-                                    @for(c <- Category.getActiveCategories) {
+                                    @for(c <- Category.find.all()) {
                                         <option value="@c.slug"@if(c.slug.equals(form.getValue("category"))){ selected="selected"}>@c.name</option>
                                     }
                                 </select>
@@ -76,7 +76,7 @@
                                             <select name="course[category]" class="form-control" required="required">
                                                 <option value="">Категория*</option>
                                                 <option disabled>-------------</option>
-                                                @for(c <- Category.getActiveCategories) {
+                                                @for(c <- Category.find.all()) {
                                                     <option value="@c.slug"@if(c.slug.equals(form.getValue("category"))){ selected="selected"}>@c.name</option>
                                                 }
                                             </select>

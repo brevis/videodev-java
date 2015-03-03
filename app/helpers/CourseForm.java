@@ -94,7 +94,7 @@ public class CourseForm {
         form.addValue("coverUrl", "");
 
         int i = 0;
-        for(Lesson lesson : course.lessons) {
+        for(Lesson lesson : course.lessons()) {
             form.addLessonValue(i, "lessonTitle", lesson.title);
             form.addLessonValue(i, "playerCode", lesson.playerCode);
             i++;

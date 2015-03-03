@@ -1,18 +1,22 @@
 @(currentPage: com.avaje.ebean.Page[Course])(cslug: String)
+@import services.AuthService
 
 @main("Мой контент") {
 
     @sidebar()
 
     <div class="main">
+
+        @flashmessage()
+
         <div class="block">
             <h2>Мой контент</h2>
 
             <div class="filter">
-                <form action="@routes.Courses.my()" method="get">
-                    <select name="cslug" class="form-control" onchange="$(this).parents('form').submit();">
+                <form action="@routes.Courses.my()" method="get" id="filterForm">
+                    <select name="cslug" class="form-control" onchange="$('#filterForm').submit();">
                         <option value="">Все категории</option>
-                        @for(c <- Category.getActiveCategories) {
+                        @for(c <- Category.getNonEmptyCategories(AuthService.getCurrentMember)) {
                             <option value="@c.slug"@if(c.slug.equals(cslug)){ selected="selected"}>@c.name</option>
                         }
                     </select>
@@ -26,11 +30,11 @@
                     <em>Пусто :(</em>
                 </p>
             } else {
-                <form action="" method="post">
+                <form action="@routes.Courses.delete()?cslug=@cslug" method="post" class="groupitems">
                     <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th><input type="checkbox"></th>
+                            <th><input type="checkbox" class="selectall"></th>
                             <th>Заголовок</th>
                             <th>Категория</th>
                             <th>Операции</th>
@@ -39,7 +43,7 @@
                     <tbody>
                         @for(course <- currentPage.getList) {
                             <tr>
-                                <td><input type="checkbox" name="id" value="@course.id"></td>
+                                <td><input type="checkbox" class="item" name="id" value="@course.id"></td>
                                 <td class="breakall">
                                     <a href="@routes.Courses.view(course.id.toString)">@course.title</a>
                                     @if(course.`type`.equals(Course.CourseType.COURSE)){ <span class="label label-info">Курс</span>}
@@ -47,14 +51,14 @@
                                 <td>@course.category.name</td>
                                 <td>
                                     <a href="@routes.Courses.edit(course.id.toString)" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a>
-                                    <a href="@routes.Courses.delete(course.id.toString)" class="btn btn-danger btn-xs" onclick="return confirm('Вы уверены, что хотите удалить элемент?')"><i class="fa fa-trash-o"></i></a>
+                                    <a href="@routes.Courses.deleteone(course.id.toString)?cslug=@cslug" class="btn btn-danger btn-xs" onclick="return confirm('Вы уверены, что хотите удалить элемент?')"><i class="fa fa-trash-o"></i></a>
                                 </td>
                             </tr>
                         }
                     </tbody>
                     </table>
 
-                    <a href="" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> Удалить выбранные</a>
+                    <button class="btn btn-danger btn-xs groupaction" disabled="disabled" onclick="return confirm('Вы уверены, что хотите удалить элемент?')"><i class="fa fa-trash-o"></i> Удалить выбранные</button>
                 </form>
 
                 @if(currentPage.getTotalPageCount > 1) {
@@ -80,4 +84,5 @@
         </div>
 
     </div>
+
 }

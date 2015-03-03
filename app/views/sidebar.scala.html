@@ -14,8 +14,8 @@
             <h3>Категории</h3>
             <ul>
                 <li><a href="@routes.Application.home()">Все</a></li>
-                @for(c <- Category.getActiveCategories) {
-                    <li><a href="@routes.Application.category(c.slug)">@c.name</a></li>
+                @for(c <- Category.getNonEmptyCategories(null)) {
+                    <li><a href="@routes.Courses.list(c.slug)">@c.name</a></li>
                 }
             </ul>
         </div>

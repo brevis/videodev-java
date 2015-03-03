@@ -10,6 +10,7 @@ import play.mvc.Results;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +49,15 @@ public class CourseService {
         for (int i=0; i<form.getLessonsCount(); i++) {
             Lesson lesson = new Lesson(course, form.getLessonValue(i, "lessonTitle"), form.getLessonValue(i, "playerCode"));
             lesson.save();
-            course.lessons.add(lesson);
+            course.lessons().add(lesson);
         }
+
+        course.save(); // hack for set course.updateDate
 
         member.courses.add(course);
         member.update();
+
+        member.addViewHistory(course);
 
         return course;
     }
@@ -81,24 +86,49 @@ public class CourseService {
         Integer courseLessonsCount = course.lessons.size();
         for (int i=0; i<form.getLessonsCount(); i++) {
             if (i < courseLessonsCount) {
-                Lesson lesson = course.lessons.get(i);
+                Lesson lesson = course.lessons().get(i);
                 lesson.title = form.getLessonValue(i, "lessonTitle");
                 lesson.playerCode = form.getLessonValue(i, "playerCode");
                 lesson.update();
             } else {
                 Lesson lesson = new Lesson(course, form.getLessonValue(i, "lessonTitle"), form.getLessonValue(i, "playerCode"));
                 lesson.save();
-                course.lessons.add(lesson);
+                course.lessons().add(lesson);
             }
         }
         for (int i=0; i<courseLessonsCount - form.getLessonsCount(); i++) {
-            Lesson lesson = course.lessons.get((int)form.getLessonsCount());
-            course.lessons.remove(lesson);
+            Lesson lesson = course.lessons().get(form.getLessonsCount());
+            course.lessons().remove(lesson);
             lesson.delete();
         }
         course.update();
 
+        course.member.addViewHistory(course);
+
         return course;
+    }
+
+    public static boolean deleteCourses(String[] ids) {
+        if (ids == null) return false;
+        ArrayList<Integer> idsList = new ArrayList<>();
+        for (String id : ids) {
+            idsList.add(Integer.parseInt(id));
+        }
+        List<Course> courses = Course.find.where()
+            .in("id", idsList)
+            .eq("member", AuthService.getCurrentMember())
+            .findList();
+        if (courses == null || courses.size() < 1) return false;
+
+        for (Course course : courses) {
+            for(Lesson lesson : course.lessons()) {
+                lesson.delete();
+            }
+            //course.deleteManyToManyAssociations("member");
+            course.delete();
+        }
+
+        return true;
     }
 
     /**
@@ -115,7 +145,7 @@ public class CourseService {
         String contentType = conn.getHeaderField("Content-Type").toLowerCase();
         if (!Arrays.asList(Cover.availableContentTypes).contains(contentType)) throw new Exception("Incorrect Content-type");
 
-        conn.setReadTimeout(3000);
+        conn.setReadTimeout(5000);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int bytesRead = -1;
         byte[] buffer = new byte[1024];

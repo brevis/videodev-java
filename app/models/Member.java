@@ -3,9 +3,7 @@ package models;
 import play.db.*;
 import play.mvc.Http;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.persistence.*;
 import play.db.ebean.*;
 
@@ -24,7 +22,10 @@ public class Member extends Model {
     public List<Course> courses = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.REMOVE)
-    public List<Lesson> viewHistory = new ArrayList<>();
+    public Set<Lesson> lessonsViewHistory = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    public Set<Course> coursesViewHistory = new HashSet<>();
 
     public static Model.Finder<String, Member> find = new Model.Finder<>(String.class, Member.class);
 
@@ -40,7 +41,7 @@ public class Member extends Model {
 
 
     public void saveMember() throws Exception {
-        if (!this.facebookId.matches("\\d+")) {
+        if (!this.facebookId.matches("^\\d+$")) {
             throw new Exception("[facebookId] field empty");
         }
         super.save();
@@ -48,6 +49,16 @@ public class Member extends Model {
 
     public String getName() {
         return this.firstName + " " + this.lastName;
+    }
+
+    public void addViewHistory(Lesson lesson) {
+        this.lessonsViewHistory.add(lesson);
+        this.coursesViewHistory.add(lesson.course);
+        this.update();
+    }
+
+    public void addViewHistory(Course course) {
+        addViewHistory(course.lessons().get(course.lessons().size() - 1));
     }
 
 }
